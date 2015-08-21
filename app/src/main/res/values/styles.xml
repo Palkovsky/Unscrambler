@@ -7,6 +7,7 @@
         <item name="colorPrimary">@color/ColorPrimary</item>
         <item name="colorPrimaryDark">@color/ColorPrimaryDark</item>
         <item name="windowActionModeOverlay">true</item>
+
         <item name="actionModeStyle">@style/LStyled.ActionMode</item>
     </style>
 
@@ -15,5 +16,6 @@
         <item name="titleTextStyle">@style/TextAppearance.AppCompat.Small</item>
         <item name="actionModeCloseDrawable">@drawable/ic_check_white_24dp</item>
     </style>
+
 
 </resources>

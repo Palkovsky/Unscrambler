@@ -8,18 +8,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
 import andrzej.example.com.wordunscrambler.R;
-import andrzej.example.com.wordunscrambler.activities.MainActivity;
-import andrzej.example.com.wordunscrambler.fragments.BrowseFragment;
-import andrzej.example.com.wordunscrambler.fragments.TabsFragment;
+import andrzej.example.com.wordunscrambler.utils.DictionaryUtils;
 
 
-public class DictionariesFragment extends Fragment implements View.OnClickListener {
+public class DictionariesFragment extends Fragment {
 
     public static final String TAG = "DICTIONARIES_FRAGMENT_TAG";
+    private static final String FILES_DIR = "files";
 
-
-    private Button browseFilesBtn;
+    //Array
+    List<File> filesDirectory = new ArrayList<>();
 
     public DictionariesFragment() {
         // Required empty public constructor
@@ -28,7 +31,12 @@ public class DictionariesFragment extends Fragment implements View.OnClickListen
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        update();
     }
 
     @Override
@@ -38,26 +46,32 @@ public class DictionariesFragment extends Fragment implements View.OnClickListen
         View v = inflater.inflate(R.layout.fragment_dictionaries, container, false);
 
         //UI init
-        browseFilesBtn = (Button) v.findViewById(R.id.browseFilesBtn);
+
 
         //Listeners
-        browseFilesBtn.setOnClickListener(this);
 
         return v;
     }
 
+    private void update(){
+        // Get local files
+        Log.e(null, "data dir: " + getActivity().getApplicationInfo().dataDir + "/" + FILES_DIR);
+        filesDirectory.clear();
+        File directory = new File(getActivity().getApplicationInfo().dataDir + "/" + FILES_DIR);
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.browseFilesBtn:
-                getActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragmentContainer, new BrowseFragment(), BrowseFragment.TAG)
-                        .commit();
-                break;
+        if (directory.listFiles() != null && directory.listFiles().length > 0) {
+            File[] listOfLocalFilesArray = directory.listFiles();
+
+            // get the names of files
+            for (File file : listOfLocalFilesArray) {
+                filesDirectory.add(file);
+            }
+        }
+
+        Log.e(null, "Files Directory size: " + filesDirectory.size());
+
+        if(filesDirectory.size()>0) {
+            Log.e(null, "Lines count of: " + filesDirectory.get(0).getName());
         }
     }
-
-
 }

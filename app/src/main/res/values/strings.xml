@@ -19,4 +19,5 @@
     <string name="importString">Import</string>
     <string name="menu_selectAll">Select all</string>
     <string name="no_files_to_import">No matching files found</string>
+    <string name="menu_browseDicts">Import dictionary</string>
 </resources>

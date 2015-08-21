@@ -4,16 +4,10 @@
     android:layout_height="match_parent"
     tools:context="andrzej.example.com.wordunscrambler.fragments.tabs.DictionariesFragment">
 
-    <Button
-        android:id="@+id/browseFilesBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/browse"/>
-
     <TextView
-        android:layout_centerInParent="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
         android:text="Dictionary Fragment" />
 
 </RelativeLayout>

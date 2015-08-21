@@ -1,5 +1,7 @@
 package andrzej.example.com.wordunscrambler.fragments;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,6 +21,9 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +32,7 @@ import andrzej.example.com.wordunscrambler.adapters.FileListAdapter;
 import andrzej.example.com.wordunscrambler.interfaces.AsyncTaskListener;
 import andrzej.example.com.wordunscrambler.interfaces.ItemCheckedListener;
 import andrzej.example.com.wordunscrambler.models.FileItem;
+import andrzej.example.com.wordunscrambler.utils.Converter;
 import andrzej.example.com.wordunscrambler.utils.FilesFinder;
 import andrzej.example.com.wordunscrambler.utils.PathObject;
 
@@ -254,14 +260,16 @@ public class BrowseFragment extends BackHandledFragment implements View.OnClickL
                                     .itemsCallbackMultiChoice(preselectedIndexes, new MaterialDialog.ListCallbackMultiChoice() {
                                         @Override
                                         public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
-                                            for(Integer index : which){
+
+                                            for (Integer index : which) {
                                                 chosenFiles.add(files.get(index));
                                             }
 
-                                            if(chosenFiles.size()>0){
-
-                                            }
-
+                                            if (chosenFiles.size() > 0) {
+                                                ImportDictionariesToInternal importDictionariesToInternalTask = new ImportDictionariesToInternal(chosenFiles);
+                                                importDictionariesToInternalTask.execute();
+                                            } else
+                                                Toast.makeText(getActivity(), R.string.no_files_to_import, Toast.LENGTH_SHORT).show();
 
                                             return true;
                                         }
@@ -270,7 +278,7 @@ public class BrowseFragment extends BackHandledFragment implements View.OnClickL
                                     .negativeText(R.string.back)
                                     .show();
 
-                        }else
+                        } else
                             Toast.makeText(getContext(), R.string.no_files_to_import, Toast.LENGTH_SHORT).show();
 
                     }
@@ -306,9 +314,9 @@ public class BrowseFragment extends BackHandledFragment implements View.OnClickL
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.menu_selectAll:
-                for(int i = 0; i<files.size(); i++){
+                for (int i = 0; i < files.size(); i++) {
                     filesListView.setItemChecked(i, true);
                 }
                 break;
@@ -317,11 +325,89 @@ public class BrowseFragment extends BackHandledFragment implements View.OnClickL
         return super.onOptionsItemSelected(item);
     }
 
+    private class ImportDictionariesToInternal extends AsyncTask<Void, Void, List<File>> {
+
+        MaterialDialog progressDialog;
+        private List<File> filesToImport;
+        private boolean running;
+        boolean showMinMax = true;
+
+        public ImportDictionariesToInternal(List<File> filesToImport) {
+            this.filesToImport = filesToImport;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            progressDialog = new MaterialDialog.Builder(getActivity())
+                    .title(R.string.progress_dialog)
+                    .content(R.string.please_wait)
+                    .progress(false, filesToImport.size(), showMinMax)
+                    .cancelable(false)
+                    .cancelListener(new DialogInterface.OnCancelListener() {
+                        @Override
+                        public void onCancel(DialogInterface dialog) {
+                            cancel(true);
+                        }
+                    })
+                    .show();
+            running = true;
+        }
+
+        @Override
+        protected List<File> doInBackground(Void... params) {
+
+            while (running) {
+                for (File chosenFile : filesToImport) {
+                    FileOutputStream fos = null;
+                    try {
+                        fos = getActivity().openFileOutput(chosenFile.getName(), Context.MODE_PRIVATE);
+                        fos.write(Converter.fileToBytesArray(chosenFile));
+                        fos.close();
+                        publishProgress();
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+                return filesToImport;
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+            if (progressDialog != null) {
+                progressDialog.incrementProgress(1);
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
+            super.onCancelled();
+            running = false;
+        }
+
+        @Override
+        protected void onPostExecute(List<File> files) {
+            super.onPostExecute(files);
+            running = false;
+            progressDialog.hide();
+        }
+    }
+
     private class SearchForDictionaries extends AsyncTask<Void, String, List<File>> {
 
         MaterialDialog progressDialog;
         private List<FileItem> selectedFiles;
         AsyncTaskListener asyncTaskListener;
+
+        private boolean running = false;
 
         public SearchForDictionaries(List<FileItem> selectedItems) {
             this.selectedFiles = selectedItems;
@@ -336,41 +422,57 @@ public class BrowseFragment extends BackHandledFragment implements View.OnClickL
                             .title(R.string.progress_dialog)
                             .content(R.string.please_wait)
                             .progress(true, 0)
+                            .cancelable(true)
+                            .cancelListener(new DialogInterface.OnCancelListener() {
+                                @Override
+                                public void onCancel(DialogInterface dialog) {
+                                    cancel(true);
+                                }
+                            })
                             .show();
-            progressDialog.setCancelable(false);
+
+            running = true;
         }
 
         @Override
         protected List<File> doInBackground(Void... params) {
 
-            List<String> paths = new ArrayList<>();
+            while (running) {
+                List<String> paths = new ArrayList<>();
 
-            List<File> files = new ArrayList<>();
+                List<File> files = new ArrayList<>();
 
-            for (FileItem file : selectedFiles) {
-                if (file.isDirectory())
-                    paths.add(path.getDirectory(file.getName()));
-                else
-                    files.add(new File(file.getName()));
+                for (FileItem file : selectedFiles) {
+                    if (file.isDirectory())
+                        paths.add(path.getDirectory(file.getName()));
+                    else
+                        files.add(new File(file.getName()));
+                }
+
+                FilesFinder finder = new FilesFinder(path.getPath());
+                for (String pathString : paths) {
+                    finder.setPath(path.getPath());
+                    files.addAll(finder.parseDirectory(pathString));
+                }
+
+                return files;
             }
-
-            FilesFinder finder = new FilesFinder(path.getPath());
-            for (String pathString : paths) {
-                finder.setPath(path.getPath());
-                files.addAll(finder.parseDirectory(pathString));
-            }
-
-            return files;
+            return null;
         }
 
+        @Override
+        protected void onCancelled() {
+            super.onCancelled();
+            running = false;
+        }
 
         @Override
         protected void onPostExecute(List<File> files) {
             super.onPostExecute(files);
-            progressDialog.setCancelable(true);
+            running = false;
             progressDialog.hide();
 
-            if (asyncTaskListener != null)
+            if (asyncTaskListener != null && files != null)
                 asyncTaskListener.onPostExecute(files);
         }
 

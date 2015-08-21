@@ -5,6 +5,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -30,7 +33,7 @@ public class TabsFragment extends BackHandledFragment implements ViewPager.OnPag
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -104,5 +107,27 @@ public class TabsFragment extends BackHandledFragment implements ViewPager.OnPag
     @Override
     public void onPageScrollStateChanged(int state) {
 
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        menu.clear();
+        // Inflate menu to add items to action bar if it is present.
+        inflater.inflate(R.menu.tabs_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_browseDicts:
+                getActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragmentContainer, new BrowseFragment(), BrowseFragment.TAG)
+                        .commit();
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
