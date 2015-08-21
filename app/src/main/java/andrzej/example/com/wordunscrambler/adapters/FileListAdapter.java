@@ -4,13 +4,12 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.CheckBox;
 import android.widget.CheckedTextView;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -22,6 +21,7 @@ import java.util.List;
 import java.util.Set;
 
 import andrzej.example.com.wordunscrambler.R;
+import andrzej.example.com.wordunscrambler.interfaces.ItemCheckedListener;
 import andrzej.example.com.wordunscrambler.models.FileItem;
 
 /**
@@ -35,6 +35,8 @@ public class FileListAdapter extends BaseAdapter {
 
     private HashMap<Integer, Boolean> mSelection = new HashMap<Integer, Boolean>();
     private List<FileItem> selectedItems = new ArrayList<FileItem>();
+
+    private ItemCheckedListener itemCheckedListener;
 
     LayoutInflater inflater;
 
@@ -85,14 +87,39 @@ public class FileListAdapter extends BaseAdapter {
 
         if (selectedItems.contains(fileItem) /*&& !fileItem.isDirectory() */) {
             mViewHolder.addCheckbox.setChecked(true);
-        }else {
+        } else {
             mViewHolder.addCheckbox.setChecked(false);
         }
 
-        if(fileItem.isDirectory()){
+        if (fileItem.isDirectory()) {
             mViewHolder.ivIcon.setImageResource(R.drawable.ic_folder_grey600_24dp);
-        }else
-            mViewHolder.ivIcon.setImageResource(android.R.color.transparent);
+        } else
+            mViewHolder.ivIcon.setImageResource(R.drawable.ic_file_document_grey600_24dp);
+
+        mViewHolder.addCheckbox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (itemCheckedListener != null)
+                    itemCheckedListener.onItemCheckStateChange(position, v, !mViewHolder.addCheckbox.isChecked());
+            }
+        });
+
+        mViewHolder.rootLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (itemCheckedListener != null)
+                    itemCheckedListener.onItemClick(position, v);
+            }
+        });
+
+        mViewHolder.rootLayout.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (itemCheckedListener != null)
+                    itemCheckedListener.onLongItemClick(position, v);
+                return false;
+            }
+        });
 
         return convertView;
     }
@@ -158,4 +185,7 @@ public class FileListAdapter extends BaseAdapter {
         }
     }
 
+    public void setOnItemCheckedListener(ItemCheckedListener itemCheckedListener) {
+        this.itemCheckedListener = itemCheckedListener;
+    }
 }

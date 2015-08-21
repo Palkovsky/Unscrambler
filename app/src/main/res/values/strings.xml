@@ -11,4 +11,12 @@
     <string name="menu_delete">Delete</string>
     <string name="singularcab">wybrany/a</string>
     <string name="pluralcab">wybrane/wybranych</string>
+    <string name="progress_dialog">Searching</string>
+    <string name="please_wait">Please wait...</string>
+    <string name="ok">Ok</string>
+    <string name="back">Back</string>
+    <string name="importing">Importing</string>
+    <string name="importString">Import</string>
+    <string name="menu_selectAll">Select all</string>
+    <string name="no_files_to_import">No matching files found</string>
 </resources>

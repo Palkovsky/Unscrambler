@@ -13,7 +13,7 @@ import java.util.List;
  * Created by andrzej on 20.08.15.
  */
 public class PathObject {
-    public static final String DEFAULT_PATH = "/";
+    public static final String DEFAULT_PATH = "/storage";
     public static final String[] WHITELISTED_EXTENSIONS = {"txt"};
 
     private String path;
@@ -63,6 +63,7 @@ public class PathObject {
 
         return values;
     }
+
 
     public boolean testFileExtension(String filename) {
         String extension = FilenameUtils.getExtension(filename);
@@ -127,5 +128,9 @@ public class PathObject {
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    public File getFile(){
+        return new File(getPath());
     }
 }

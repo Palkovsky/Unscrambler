@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:hmkcode="http://schemas.android.com/apk/res-auto">
+
     <item
-        android:id="@+id/menu_import"
-        android:icon="@drawable/ic_import_white_24dp"
+        android:id="@+id/menu_selectAll"
+        android:icon="@drawable/ic_checkbox_marked_outline_white_24dp"
         hmkcode:showAsAction="ifRoom|withText"
-        android:title="@string/menu_delete"
-        android:titleCondensed="Delete">
+        android:title="@string/menu_selectAll"
+        android:titleCondensed="@string/menu_selectAll">
     </item>
+
 </menu>
