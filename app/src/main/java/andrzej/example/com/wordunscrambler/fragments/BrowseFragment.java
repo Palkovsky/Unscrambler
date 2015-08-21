@@ -427,7 +427,7 @@ public class BrowseFragment extends BackHandledFragment implements View.OnClickL
                             .title(R.string.progress_dialog)
                             .content(R.string.please_wait)
                             .progress(true, 0)
-                            .cancelable(true)
+                            .cancelable(false)
                             .cancelListener(new DialogInterface.OnCancelListener() {
                                 @Override
                                 public void onCancel(DialogInterface dialog) {

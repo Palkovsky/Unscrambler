@@ -5,4 +5,5 @@ package andrzej.example.com.wordunscrambler.config;
  */
 public class TabsConfig {
     public static int CURRENT_TAB_NUM = 0;
+    public static int CURRENT_DICTIONARY_POSITION = 0;
 }

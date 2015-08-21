@@ -1,5 +1,7 @@
 package andrzej.example.com.wordunscrambler.models;
 
+import org.apache.commons.io.FilenameUtils;
+
 import java.io.File;
 
 import andrzej.example.com.wordunscrambler.utils.Converter;
@@ -14,7 +16,7 @@ public class Dictionary {
     private boolean current = false;
 
     public Dictionary(String name, File file) {
-        this.name = name;
+        this.name = FilenameUtils.removeExtension(name);
         this.file = file;
     }
 
@@ -59,12 +61,16 @@ public class Dictionary {
         return Converter.getTextFileContents(getFile()).split("\\s+");
     }
 
+    public void removeFile(){
+        getFile().delete();
+    }
+
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = FilenameUtils.removeExtension(name);
     }
 
     public File getFile() {

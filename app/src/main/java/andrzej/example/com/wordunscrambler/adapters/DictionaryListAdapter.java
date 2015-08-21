@@ -3,17 +3,25 @@ package andrzej.example.com.wordunscrambler.adapters;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.daimajia.swipe.SwipeLayout;
+import com.gc.materialdesign.views.ButtonRectangle;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import andrzej.example.com.wordunscrambler.R;
+import andrzej.example.com.wordunscrambler.config.TabsConfig;
+import andrzej.example.com.wordunscrambler.interfaces.ItemActionsListener;
 import andrzej.example.com.wordunscrambler.models.Dictionary;
 
 /**
@@ -26,6 +34,8 @@ public class DictionaryListAdapter extends BaseAdapter {
     private Context context;
     private List<Dictionary> mDataset;
     private LayoutInflater inflater;
+
+    ItemActionsListener itemActionsListener;
 
     public DictionaryListAdapter(Context context, List<Dictionary> mDataset) {
         this.context = context;
@@ -49,7 +59,7 @@ public class DictionaryListAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         DictionaryItemViewHolder mViewHolder;
 
         if (convertView == null) {
@@ -60,23 +70,46 @@ public class DictionaryListAdapter extends BaseAdapter {
             mViewHolder = (DictionaryItemViewHolder) convertView.getTag();
         }
 
-        Dictionary dictionary = getItem(position);
+        TabsConfig.CURRENT_DICTIONARY_POSITION = position;
 
-        /*
-        if(position%2 == 0)
-            setViewBackground(mViewHolder.rootLayout, ContextCompat.getDrawable(getContext(), R.drawable.item_selector_white));
-        else
-            setViewBackground(mViewHolder.rootLayout, ContextCompat.getDrawable(getContext(), R.drawable.item_selector_gray));
-    */
-
+        final Dictionary dictionary = getItem(position);
 
         mViewHolder.tvTitle.setText(dictionary.getName());
         mViewHolder.tvWordsCount.setText(String.valueOf(dictionary.getWordsCount()));
         mViewHolder.tvFirstWords.setText(dictionary.getFirstNWordsInString(FIRST_WORDS_TO_LOAD));
-        
+
+        mViewHolder.topWrapper.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (itemActionsListener != null)
+                    itemActionsListener.onItemClick(v, position);
+            }
+        });
+
+        mViewHolder.topWrapper.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (itemActionsListener != null)
+                    itemActionsListener.onLongItemClick(v, position);
+                return false;
+            }
+        });
+
+        mViewHolder.deleteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (itemActionsListener != null)
+                    itemActionsListener.deleteItemAction(position);
+            }
+        });
+
+
+
 
         return convertView;
     }
+
+
 
     private Context getContext() {
         return context;
@@ -84,16 +117,24 @@ public class DictionaryListAdapter extends BaseAdapter {
 
     private class DictionaryItemViewHolder {
 
-        RelativeLayout rootLayout;
+        SwipeLayout rootLayout;
+        RelativeLayout topWrapper;
+        ButtonRectangle deleteBtn;
         TextView tvTitle;
         TextView tvWordsCount;
         TextView tvFirstWords;
 
         public DictionaryItemViewHolder(View item) {
-            rootLayout = (RelativeLayout) item.findViewById(R.id.rootLayout);
+            rootLayout = (SwipeLayout) item.findViewById(R.id.rootLayout);
+            topWrapper = (RelativeLayout) item.findViewById(R.id.top_wrapper);
+            deleteBtn = (ButtonRectangle) item.findViewById(R.id.deleteBtn);
             tvTitle = (TextView) item.findViewById(R.id.titleTv);
             tvWordsCount = (TextView) item.findViewById(R.id.wordsCountTv);
             tvFirstWords = (TextView) item.findViewById(R.id.firstWordsTv);
+
+            //Swipe Layout config
+            rootLayout.setShowMode(SwipeLayout.ShowMode.LayDown);
+            rootLayout.addDrag(SwipeLayout.DragEdge.Right, item.findViewById(R.id.bottom_wrapper));
         }
     }
 
@@ -105,5 +146,9 @@ public class DictionaryListAdapter extends BaseAdapter {
         } else {
             iv.setBackgroundDrawable(drawable);
         }
+    }
+
+    public void registerItemActionsListener(ItemActionsListener itemActionsListener) {
+        this.itemActionsListener = itemActionsListener;
     }
 }

@@ -1,5 +1,6 @@
 package andrzej.example.com.wordunscrambler.fragments.tabs;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -17,13 +18,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import andrzej.example.com.wordunscrambler.R;
+import andrzej.example.com.wordunscrambler.activities.DictionaryActivity;
 import andrzej.example.com.wordunscrambler.adapters.DictionaryListAdapter;
+import andrzej.example.com.wordunscrambler.config.TabsConfig;
+import andrzej.example.com.wordunscrambler.interfaces.ItemActionsListener;
 import andrzej.example.com.wordunscrambler.models.Dictionary;
 import andrzej.example.com.wordunscrambler.utils.Converter;
 import andrzej.example.com.wordunscrambler.utils.DictionaryUtils;
 
 
-public class DictionariesFragment extends Fragment {
+public class DictionariesFragment extends Fragment implements ItemActionsListener {
 
     public static final String TAG = "DICTIONARIES_FRAGMENT_TAG";
     private static final String FILES_DIR = "files";
@@ -55,6 +59,11 @@ public class DictionariesFragment extends Fragment {
         super.onResume();
 
         update();
+
+        if (dictionaries.size() > 0) {
+            dictionariesListView.setSelection(TabsConfig.CURRENT_DICTIONARY_POSITION);
+        } else
+            TabsConfig.CURRENT_DICTIONARY_POSITION = 0;
     }
 
     @Override
@@ -69,6 +78,9 @@ public class DictionariesFragment extends Fragment {
 
         //Init
         dictionariesListView.setAdapter(mAdapter);
+
+        //Listeners
+        mAdapter.registerItemActionsListener(this);
 
         mAdapter.notifyDataSetChanged();
 
@@ -93,11 +105,31 @@ public class DictionariesFragment extends Fragment {
                 filesDirectory.add(file);
                 dictionaries.add(new Dictionary(file.getName(), file));
             }
-        }else{
+        } else {
             noDictionariesLayout.setVisibility(View.VISIBLE);
             dictionariesListView.setVisibility(View.GONE);
         }
 
         mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onItemClick(View v, int position) {
+        TabsConfig.CURRENT_DICTIONARY_POSITION = position;
+        Intent dictionaryIntent = new Intent(getActivity(), DictionaryActivity.class);
+        startActivity(dictionaryIntent);
+    }
+
+    @Override
+    public void onLongItemClick(View v, int position) {
+        //Don't have idea to put here
+    }
+
+    @Override
+    public void deleteItemAction(int position) {
+        Dictionary dictionaryToRemove = dictionaries.get(position);
+        dictionaryToRemove.removeFile();
+        dictionaries.remove(position);
+        update();
     }
 }

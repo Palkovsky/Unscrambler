@@ -1,42 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.daimajia.swipe.SwipeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rootLayout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/item_selector_white"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-
-    <TextView
-        android:id="@+id/wordsCountTv"
+    <!-- Bottom View start -->
+    <RelativeLayout
+        android:id="@+id/bottom_wrapper"
         android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:weightSum="1">
+
+        <com.gc.materialdesign.views.ButtonRectangle
+            android:id="@+id/deleteBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/delete"
+            />
+    </RelativeLayout>
+    <!-- Bottom View end -->
+
+    <!-- Surface View Start -->
+    <RelativeLayout
+        android:id="@+id/top_wrapper"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:textColor="@android:color/black"
-        android:layout_margin="16dp"
-        android:textAppearance="@android:style/TextAppearance.Medium"
-        android:textSize="36sp" />
-
-    <TextView
-        android:id="@+id/titleTv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:layout_toEndOf="@+id/wordsCountTv"
-        android:layout_toRightOf="@+id/wordsCountTv"
-        android:textAppearance="@android:style/TextAppearance.Large" />
+        android:background="@drawable/item_selector_white"
+        android:orientation="vertical">
 
 
-    <TextView
-        android:id="@+id/firstWordsTv"
-        android:textColor="@android:color/darker_gray"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/titleTv"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="16dp"
-        android:layout_toEndOf="@+id/wordsCountTv"
-        android:layout_toRightOf="@+id/wordsCountTv"
-        android:textAppearance="@android:style/TextAppearance.Small" />
+        <TextView
+            android:id="@+id/wordsCountTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_margin="16dp"
+            android:textAppearance="@android:style/TextAppearance.Medium"
+            android:textColor="@android:color/black"
+            android:textSize="36sp" />
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/titleTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_toEndOf="@+id/wordsCountTv"
+            android:layout_toRightOf="@+id/wordsCountTv"
+            android:textAppearance="@android:style/TextAppearance.Large" />
+
+
+        <TextView
+            android:id="@+id/firstWordsTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/titleTv"
+            android:layout_marginBottom="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_toEndOf="@+id/wordsCountTv"
+            android:layout_toRightOf="@+id/wordsCountTv"
+            android:textAppearance="@android:style/TextAppearance.Small"
+            android:textColor="@android:color/darker_gray" />
+    </RelativeLayout>
+    <!-- Surface View End -->
+
+</com.daimajia.swipe.SwipeLayout>

@@ -21,4 +21,6 @@
     <string name="no_files_to_import">No matching files found</string>
     <string name="menu_browseDicts">Import dictionary</string>
     <string name="no_dictionaries">No dictionary files.</string>
+    <string name="delete">Delete</string>
+    <string name="title_activity_dictionary">DictionaryActivity</string>
 </resources>
