@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:descendantFocusability="blocksDescendants"
+    android:layout_width="match_parent"
+    android:id="@+id/rootLayout"
+    android:layout_height="?android:attr/listPreferredItemHeight"
+    android:background="@drawable/item_selector"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/iconIv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/browserItemMargin"
+        android:layout_marginStart="@dimen/browserItemMargin" />
+
+    <TextView
+        android:id="@+id/nameTv"
+        android:layout_toRightOf="@+id/iconIv"
+        android:layout_toEndOf="@+id/iconIv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/browserItemMargin"
+        android:layout_marginStart="@dimen/browserItemMargin"
+        android:textAppearance="@android:style/TextAppearance.Medium"
+        android:textColor="@android:color/black" />
+
+    <CheckedTextView
+        android:id="@+id/addCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+        android:layout_marginRight="@dimen/checkBoxRightRight"
+        android:layout_marginEnd="@dimen/checkBoxRightRight"
+        android:layout_centerVertical="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true" />
+
+
+</RelativeLayout>

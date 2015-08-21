@@ -15,7 +15,7 @@ import andrzej.example.com.wordunscrambler.config.TabsConfig;
 import andrzej.example.com.wordunscrambler.views.SlidingTabLayout;
 
 
-public class TabsFragment extends BackHandledFragment {
+public class TabsFragment extends BackHandledFragment implements ViewPager.OnPageChangeListener {
 
     public static final String TAG = "TABS_FRAGMENT_TAG";
 
@@ -63,6 +63,8 @@ public class TabsFragment extends BackHandledFragment {
         tabs.setCustomTabView(R.layout.custom_tab, 0);
         tabs.setViewPager(pager);
 
+        tabs.setOnPageChangeListener(this);
+
         return v;
     }
 
@@ -70,13 +72,15 @@ public class TabsFragment extends BackHandledFragment {
     public void onResume() {
         super.onResume();
         pager.setCurrentItem(TabsConfig.CURRENT_TAB_NUM);
+        TabsConfig.CURRENT_TAB_NUM = pager.getCurrentItem();
     }
 
     @Override
     public boolean onBackPressed() {
-        if (pager.getCurrentItem() == 1)
+        if (pager.getCurrentItem() == 1) {
             pager.setCurrentItem(0);
-        else
+            TabsConfig.CURRENT_TAB_NUM = pager.getCurrentItem();
+        }else
             getActivity().moveTaskToBack(true);
 
         return true;
@@ -85,5 +89,20 @@ public class TabsFragment extends BackHandledFragment {
     @Override
     public String getTagText() {
         return TAG;
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        TabsConfig.CURRENT_TAB_NUM = position;
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
     }
 }

@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     //Fragments
     TabsFragment tabsFragment;
-    BrowseFragment browseFragment;
+    public static BrowseFragment browseFragment;
     DictionariesFragment dictionariesFragment;
     UnscrambleFragment unscrambleFragment;
 

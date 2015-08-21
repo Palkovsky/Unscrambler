@@ -39,11 +39,9 @@ public class TabsAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
 
         if (position == 0) {
-            TabsConfig.CURRENT_TAB_NUM = 0;
             UnscrambleFragment unscrambleFragment = new UnscrambleFragment();
             return unscrambleFragment;
         } else {
-            TabsConfig.CURRENT_TAB_NUM = 1;
             DictionariesFragment dictionariesFragment = new DictionariesFragment();
             return dictionariesFragment;
         }

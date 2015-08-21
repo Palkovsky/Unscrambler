@@ -1,13 +1,49 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="andrzej.example.com.wordunscrambler.fragments.tabs.BrowseFragment">
 
-    <TextView
+    <LinearLayout
+        android:id="@+id/goUpDirectoryButton"
+        android:background="@drawable/item_selector"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="File Browser" />
+        android:layout_height="50dp">
 
-</LinearLayout>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/browserItemMargin"
+            android:layout_marginStart="@dimen/browserItemMargin"
+            android:background="@drawable/ic_arrow_left_grey600_24dp"/>
+
+        <TextView
+            android:id="@+id/currentDirectoryTv"
+            android:layout_marginLeft="@dimen/browserItemMargin"
+            android:layout_marginStart="@dimen/browserItemMargin"
+            android:textAppearance="@android:style/TextAppearance.Medium"
+            android:textColor="@android:color/black"
+            android:layout_gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <View
+        android:layout_below="@+id/goUpDirectoryButton"
+        android:layout_width="fill_parent"
+        android:layout_height="2dp"
+        android:background="#c0c0c0"/>
+
+    <include layout="@layout/no_matching_files" />
+
+    <ListView
+        android:id="@+id/filesListView"
+        android:choiceMode="multipleChoice"
+        android:layout_below="@+id/goUpDirectoryButton"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</RelativeLayout>
