@@ -31,4 +31,5 @@ dependencies {
     compile 'commons-io:commons-io:2.4'
     compile 'com.android.support:recyclerview-v7:+'
     compile 'com.afollestad:material-dialogs:0.7.8.1'
+    compile 'com.github.nirhart:parallaxscroll:1.0'
 }

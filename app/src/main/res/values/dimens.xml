@@ -5,4 +5,5 @@
     <dimen name="browserItemMargin">24dp</dimen>
     <dimen name="browserTextMargin">16dp</dimen>
     <dimen name="checkBoxRightRight">16dp</dimen>
+    <dimen name="error_textSize">24sp</dimen>
 </resources>

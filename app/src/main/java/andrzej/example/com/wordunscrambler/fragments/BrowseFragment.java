@@ -398,6 +398,11 @@ public class BrowseFragment extends BackHandledFragment implements View.OnClickL
             super.onPostExecute(files);
             running = false;
             progressDialog.hide();
+
+            getActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragmentContainer, new TabsFragment(), TabsFragment.TAG)
+                    .commit();
         }
     }
 
@@ -470,7 +475,10 @@ public class BrowseFragment extends BackHandledFragment implements View.OnClickL
         protected void onPostExecute(List<File> files) {
             super.onPostExecute(files);
             running = false;
+
+
             progressDialog.hide();
+
 
             if (asyncTaskListener != null && files != null)
                 asyncTaskListener.onPostExecute(files);

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/noFilesLayout"
+    android:id="@+id/noDictionariesLayout"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_centerInParent="true"
@@ -14,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:background="@drawable/no_files" />
+        android:background="@drawable/no_dictionaries" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -22,7 +21,7 @@
         android:layout_margin="@dimen/browserItemMargin"
         android:layout_gravity="center"
         android:textColor="@android:color/black"
-        android:text="@string/no_matching_files"
+        android:text="@string/no_dictionaries"
         android:textSize="@dimen/error_textSize"
         android:textAppearance="@android:style/TextAppearance.Medium"/>
 
