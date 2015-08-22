@@ -75,8 +75,12 @@ public class DictionaryListAdapter extends BaseAdapter {
 
         if(DictionaryUtils.isCurrentDictionary(context, dictionary)){
             setViewBackground(mViewHolder.topWrapper, ContextCompat.getDrawable(context, R.drawable.item_selector_highlited));
+            mViewHolder.setBtn.setBootstrapButtonEnabled(false);
+            mViewHolder.setBtn.setBootstrapType("default");
         }else{
             setViewBackground(mViewHolder.topWrapper, ContextCompat.getDrawable(context, R.drawable.item_selector_white));
+            mViewHolder.setBtn.setBootstrapButtonEnabled(true);
+            mViewHolder.setBtn.setBootstrapType("success");
         }
 
         mViewHolder.tvTitle.setText(dictionary.getName());

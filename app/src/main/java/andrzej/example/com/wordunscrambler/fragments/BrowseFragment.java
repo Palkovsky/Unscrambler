@@ -29,6 +29,7 @@ import java.util.List;
 
 import andrzej.example.com.wordunscrambler.R;
 import andrzej.example.com.wordunscrambler.adapters.FileListAdapter;
+import andrzej.example.com.wordunscrambler.config.TabsConfig;
 import andrzej.example.com.wordunscrambler.interfaces.AsyncTaskListener;
 import andrzej.example.com.wordunscrambler.interfaces.ItemCheckedListener;
 import andrzej.example.com.wordunscrambler.models.FileItem;
@@ -398,6 +399,8 @@ public class BrowseFragment extends BackHandledFragment implements View.OnClickL
             super.onPostExecute(files);
             running = false;
             progressDialog.hide();
+
+            TabsConfig.CURRENT_TAB_NUM = 1;
 
             getActivity().getSupportFragmentManager()
                     .beginTransaction()

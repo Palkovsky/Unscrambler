@@ -3,6 +3,9 @@ apply plugin: 'com.android.application'
 repositories {
     jcenter()
     mavenCentral()
+    maven {
+        url "https://repo.commonsware.com.s3.amazonaws.com"
+    }
 }
 
 android {
@@ -35,4 +38,6 @@ dependencies {
     compile "com.daimajia.swipelayout:library:1.2.0@aar"
     compile 'com.android.support:design:22.2.0'
     compile 'com.beardedhen:androidbootstrap:+'
+    compile 'com.commonsware.cwac:richedit:0.5.+'
+    compile 'com.rengwuxian.materialedittext:library:2.1.4'
 }

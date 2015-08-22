@@ -1,6 +1,24 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:hmkcode="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="andrzej.example.com.wordunscrambler.activities.DictionaryActivity">
+
+    <item
+        android:id="@+id/menu_deleteDictionary"
+        android:icon="@drawable/ic_delete_white_24dp"
+        hmkcode:showAsAction="ifRoom"
+        android:title="@string/delete"
+        android:titleCondensed="@string/delete">
+    </item>
+
+
+    <item
+        android:id="@+id/menu_saveDictionary"
+        android:icon="@drawable/ic_content_save_all_white_24dp"
+        hmkcode:showAsAction="ifRoom"
+        android:title="@string/save"
+        android:titleCondensed="@string/save">
+    </item>
 
 </menu>

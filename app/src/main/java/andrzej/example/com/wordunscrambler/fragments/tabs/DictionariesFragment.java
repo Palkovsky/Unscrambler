@@ -44,7 +44,7 @@ import andrzej.example.com.wordunscrambler.utils.WordCountDescComparator;
 public class DictionariesFragment extends Fragment implements ItemActionsListener, View.OnClickListener {
 
     public static final String TAG = "DICTIONARIES_FRAGMENT_TAG";
-    private static final String FILES_DIR = "files";
+    public static final String FILES_DIR = "files";
 
 
     private static int sortingMethod = SortingMethods.NO_SORTING;
@@ -87,9 +87,9 @@ public class DictionariesFragment extends Fragment implements ItemActionsListene
 
         update();
 
-        if (dictionaries.size() > 0) {
+        if (dictionaries.size() > 0)
             dictionariesListView.setSelection(TabsConfig.CURRENT_DICTIONARY_POSITION);
-        } else
+         else
             TabsConfig.CURRENT_DICTIONARY_POSITION = 0;
     }
 
@@ -122,28 +122,33 @@ public class DictionariesFragment extends Fragment implements ItemActionsListene
         removeCurrentDictBtn.setOnClickListener(this);
 
         //Logic init
-        setDictionary(DictionaryUtils.getCurrentDictionary(getActivity()));
-        mAdapter.notifyDataSetChanged();
+        update();
 
         return v;
     }
 
 
     private void update() {
+
         // Get local files
-        Log.e(null, "data dir: " + getActivity().getApplicationInfo().dataDir + "/" + FILES_DIR);
         File directory = new File(getActivity().getApplicationInfo().dataDir + "/" + FILES_DIR);
 
         dictionaries.clear();
         filesDirectory.clear();
 
         Dictionary currentDictionary = DictionaryUtils.getCurrentDictionary(getActivity());
+        setDictionary(currentDictionary);
+
+
         if (currentDictionary == null) {
             removeCurrentDictBtn.setVisibility(View.GONE);
             currentDictionaryLayout.setClickable(false);
         }else {
             removeCurrentDictBtn.setVisibility(View.VISIBLE);
             currentDictionaryLayout.setClickable(true);
+
+            if(!currentDictionary.getFile().exists())
+                setDictionary(null);
         }
 
         if (directory.listFiles() != null && directory.listFiles().length > 0) {
@@ -192,12 +197,16 @@ public class DictionariesFragment extends Fragment implements ItemActionsListene
             currentWordCount.setText("0");
             currentFirstWords.setText("...");
             removeCurrentDictBtn.setVisibility(View.GONE);
+            removeCurrentDictBtn.setVisibility(View.GONE);
+            currentDictionaryLayout.setClickable(false);
             DictionaryUtils.setDictionaryPreference(getActivity(), null);
         } else {
             currentName.setText(dictionary.getName());
             currentWordCount.setText(String.valueOf(dictionary.getWordsCount()));
             currentFirstWords.setText(dictionary.getFirstNWordsInString(DictionaryListAdapter.FIRST_WORDS_TO_LOAD));
             removeCurrentDictBtn.setVisibility(View.VISIBLE);
+            removeCurrentDictBtn.setVisibility(View.VISIBLE);
+            currentDictionaryLayout.setClickable(true);
             DictionaryUtils.setDictionaryPreference(getActivity(), dictionary);
         }
     }

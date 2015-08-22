@@ -23,7 +23,7 @@
     <string name="no_dictionaries">No dictionary files.</string>
     <string name="delete">Delete</string>
     <string name="set">Set</string>
-    <string name="title_activity_dictionary">DictionaryActivity</string>
+    <string name="title_activity_dictionary">Customize Dictionary</string>
     <string name="current_dictionary">Current Dictionary</string>
     <string name="current_dictionary_colon">Current dictionary:</string>
     <string name="dictionaries_colon">Dictionaries:</string>
@@ -35,4 +35,15 @@
     <string name="sorting">Sorting</string>
     <string name="unscrambler">Word Unscrambler</string>
     <string name="dictionaries">Dictionaries</string>
+    <string name="save">Save</string>
+    <string name="dictionaryNameHinit">Name</string>
+    <string name="dictionaryContentHint">Words separated by whitespaces</string>
+    <string name="are_you_sure_to_delete">Are you sure to delete this dictionary?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="file_already_exsists">Dictionary with that name already exsists</string>
+    <string name="menu_createDictionary">Create dictionary</string>
+    <string name="empty_name">You didn\'t specify name</string>
+    <string name="dot_name">Name can\'t start with a dot</string>
+    <string name="empty_content">\'Content\' must not be empty</string>
 </resources>

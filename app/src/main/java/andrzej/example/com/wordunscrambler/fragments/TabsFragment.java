@@ -1,5 +1,6 @@
 package andrzej.example.com.wordunscrambler.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import andrzej.example.com.wordunscrambler.R;
+import andrzej.example.com.wordunscrambler.activities.DictionaryActivity;
 import andrzej.example.com.wordunscrambler.activities.MainActivity;
 import andrzej.example.com.wordunscrambler.adapters.TabsAdapter;
 import andrzej.example.com.wordunscrambler.config.TabsConfig;
@@ -136,6 +138,12 @@ public class TabsFragment extends BackHandledFragment implements ViewPager.OnPag
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+
+            case R.id.menu_createDictionary:
+                Intent dictionaryIntent = new Intent(getActivity(), DictionaryActivity.class);
+                startActivity(dictionaryIntent);
+                break;
+
             case R.id.menu_browseDicts:
                 getActivity().getSupportFragmentManager()
                         .beginTransaction()

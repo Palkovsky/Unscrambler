@@ -19,10 +19,17 @@ public class Dictionary {
     public Dictionary(String name, File file) {
         this.name = FilenameUtils.removeExtension(name);
         this.file = file;
-        this.wordCount = getWordsCount();
+        if (file != null)
+            this.wordCount = getWordsCount();
     }
 
     public int getWordsCount() {
+        String[] chunks = getContentChunks();
+
+        if(chunks.length==1){
+            if(chunks[0].trim().equals(""))
+                return 0;
+        }
         return getContentChunks().length;
     }
 
@@ -63,7 +70,7 @@ public class Dictionary {
         return Converter.getTextFileContents(getFile()).split("\\s+");
     }
 
-    public void removeFile(){
+    public void removeFile() {
         getFile().delete();
     }
 
