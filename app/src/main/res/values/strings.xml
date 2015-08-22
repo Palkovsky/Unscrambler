@@ -22,5 +22,17 @@
     <string name="menu_browseDicts">Import dictionary</string>
     <string name="no_dictionaries">No dictionary files.</string>
     <string name="delete">Delete</string>
+    <string name="set">Set</string>
     <string name="title_activity_dictionary">DictionaryActivity</string>
+    <string name="current_dictionary">Current Dictionary</string>
+    <string name="current_dictionary_colon">Current dictionary:</string>
+    <string name="dictionaries_colon">Dictionaries:</string>
+    <string name="choose">Choose</string>
+    <string name="no_sorting">No sorting</string>
+    <string name="fromAtoZsorting">A-Z</string>
+    <string name="wordsAscCount">Word Count Ascending</string>
+    <string name="wordsDescCount">Word Count Descending</string>
+    <string name="sorting">Sorting</string>
+    <string name="unscrambler">Word Unscrambler</string>
+    <string name="dictionaries">Dictionaries</string>
 </resources>

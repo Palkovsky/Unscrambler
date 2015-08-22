@@ -1,23 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.daimajia.swipe.SwipeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bootstrap="http://schemas.android.com/apk/res-auto"
     android:id="@+id/rootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <!-- Bottom View start -->
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/bottom_wrapper"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:orientation="horizontal"
         android:weightSum="1">
 
-        <com.gc.materialdesign.views.ButtonRectangle
+        <com.beardedhen.androidbootstrap.BootstrapButton
             android:id="@+id/deleteBtn"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:text="@string/delete"
+            bootstrap:bb_icon_right="fa-trash"
+            bootstrap:bb_type="danger"
+            android:weightSum="1"
             />
-    </RelativeLayout>
+
+        <com.beardedhen.androidbootstrap.BootstrapButton
+            android:id="@+id/setBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/set"
+            bootstrap:bb_icon_right="fa-save"
+            bootstrap:bb_type="success"
+            android:weightSum="1"
+            />
+    </LinearLayout>
     <!-- Bottom View end -->
 
     <!-- Surface View Start -->

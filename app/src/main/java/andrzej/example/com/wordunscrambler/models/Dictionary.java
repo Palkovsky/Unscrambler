@@ -13,11 +13,13 @@ public class Dictionary {
 
     private String name;
     private File file;
+    private int wordCount;
     private boolean current = false;
 
     public Dictionary(String name, File file) {
         this.name = FilenameUtils.removeExtension(name);
         this.file = file;
+        this.wordCount = getWordsCount();
     }
 
     public int getWordsCount() {
@@ -79,6 +81,7 @@ public class Dictionary {
 
     public void setFile(File file) {
         this.file = file;
+        wordCount = getWordsCount();
     }
 
     public boolean isCurrent() {
@@ -87,5 +90,9 @@ public class Dictionary {
 
     public void setCurrent(boolean current) {
         this.current = current;
+    }
+
+    public int getWordCount() {
+        return wordCount;
     }
 }

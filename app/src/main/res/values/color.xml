@@ -9,4 +9,7 @@
     </color>
     <color name="list_item_highliht_no_transparency">#b3e5fc</color>
     <color name="gray">#eeeeee</color>
+    <color name="currentDictionaryColor">#c0ca33</color>
+    <color name="currentDictionartHighlitedColor">#dce775</color>
+    <color name="dark_gray">#e0e0e0</color>
 </resources>

@@ -9,6 +9,7 @@ import android.support.v4.content.ContextCompat;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ImageSpan;
+import android.util.Log;
 
 import andrzej.example.com.wordunscrambler.R;
 import andrzej.example.com.wordunscrambler.config.TabsConfig;
@@ -22,7 +23,7 @@ public class TabsAdapter extends FragmentStatePagerAdapter {
 
     CharSequence titles[] = {"Unscrambler", "Dictionaries"}; // This will Store the Titles of the Tabs which are Going to be passed when ViewPagerAdapter is created
     int numOfTabs = 2;
-    public static final int[] imageResId = {R.drawable.ic_puzzle_white_24dp,
+    public static int[] imageResId = {R.drawable.ic_puzzle_white_24dp,
             R.drawable.ic_library_books_white_24dp};
 
 
@@ -38,21 +39,40 @@ public class TabsAdapter extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int position) {
 
+        Log.e(null, "Get Item called");
+
         if (position == 0) {
             UnscrambleFragment unscrambleFragment = new UnscrambleFragment();
+
             return unscrambleFragment;
         } else {
             DictionariesFragment dictionariesFragment = new DictionariesFragment();
+
             return dictionariesFragment;
         }
 
 
     }
 
+
+
+
     // This method return the Number of tabs for the tabs Strip
 
     @Override
     public CharSequence getPageTitle(int position) {
+
+        /*
+        Log.e(null, "getPageTitlePos: " + position);
+        if(position==0){
+            imageResId[0] = R.drawable.ic_puzzle_white_24dp;
+            imageResId[1] = R.drawable.ic_library_books_black_24dp;
+        }else{
+            imageResId[0] = R.drawable.ic_puzzle_black_24dp;
+            imageResId[1] = R.drawable.ic_library_books_white_24dp;
+        }
+        */
+
         Drawable image = ContextCompat.getDrawable(getContext(), imageResId[position]);
         image.setBounds(0, 0, image.getIntrinsicWidth(), image.getIntrinsicHeight());
         SpannableString sb = new SpannableString(" ");

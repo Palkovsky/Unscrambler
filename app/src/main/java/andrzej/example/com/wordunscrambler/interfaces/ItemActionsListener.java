@@ -8,5 +8,6 @@ import android.view.View;
 public interface ItemActionsListener {
     void onItemClick(View v, int position);
     void onLongItemClick(View v, int position);
+    void setItemAction(int position);
     void deleteItemAction(int position);
 }

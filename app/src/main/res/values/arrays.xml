@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="sortingDialogItems">
+        <item>@string/no_sorting</item> <!-- 0 -->
+        <item>@string/fromAtoZsorting</item> <!-- 1 -->
+        <item>@string/fromZtoAsorting</item> <!-- 2 -->
+        <item>@string/wordsAscCount</item> <!-- 3 -->
+        <item>@string/wordsDescCount</item> <!-- 4 -->
+    </string-array>
+    <string name="fromZtoAsorting">Z-A</string>
+</resources>

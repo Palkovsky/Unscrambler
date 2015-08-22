@@ -3,6 +3,7 @@ package andrzej.example.com.wordunscrambler.fragments;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -62,6 +63,7 @@ public class TabsFragment extends BackHandledFragment implements ViewPager.OnPag
             }
         });
 
+
         // Setting the ViewPager For the SlidingTabsLayout
         tabs.setCustomTabView(R.layout.custom_tab, 0);
         tabs.setViewPager(pager);
@@ -83,7 +85,7 @@ public class TabsFragment extends BackHandledFragment implements ViewPager.OnPag
         if (pager.getCurrentItem() == 1) {
             pager.setCurrentItem(0);
             TabsConfig.CURRENT_TAB_NUM = pager.getCurrentItem();
-        }else
+        } else
             getActivity().moveTaskToBack(true);
 
         return true;
@@ -102,6 +104,20 @@ public class TabsFragment extends BackHandledFragment implements ViewPager.OnPag
     @Override
     public void onPageSelected(int position) {
         TabsConfig.CURRENT_TAB_NUM = position;
+
+        Log.e(null, "onPageSelected called");
+
+        switch (position) {
+            //Unscramble fragment
+            case 0:
+                ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.unscrambler);
+                break;
+
+            //Dictionaries fragment
+            case 1:
+                ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.dictionaries);
+                break;
+        }
     }
 
     @Override
