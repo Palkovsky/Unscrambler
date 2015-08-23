@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.beardedhen.androidbootstrap.BootstrapButton;
+import com.daimajia.swipe.SwipeLayout;
 import com.nirhart.parallaxscroll.views.ParallaxListView;
 
 import java.io.File;
@@ -69,7 +70,9 @@ public class DictionariesFragment extends Fragment implements ItemActionsListene
     TextView dictionariesSortingMethodTv;
     BootstrapButton sortBtn;
     BootstrapButton removeCurrentDictBtn;
+    BootstrapButton removeAllDictionaries;
     ParallaxListView dictionariesListView;
+    SwipeLayout navigationBarSwipeLayout;
 
     //Adapter
     DictionaryListAdapter mAdapter;
@@ -120,15 +123,20 @@ public class DictionariesFragment extends Fragment implements ItemActionsListene
         snackbarCoordinatorLayout = (CoordinatorLayout) v.findViewById(R.id.snackbarCoordinatorLayout);
         sortBtn = (BootstrapButton) v.findViewById(R.id.sortBtn);
         removeCurrentDictBtn = (BootstrapButton) v.findViewById(R.id.removeCurrentDictBtn);
+        removeAllDictionaries = (BootstrapButton) v.findViewById(R.id.deleteAllDictionariesBtn);
+        navigationBarSwipeLayout = (SwipeLayout) v.findViewById(R.id.navigationBarSwipeLayout);
 
         //Init
         dictionariesListView.setAdapter(mAdapter);
+        navigationBarSwipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
+        navigationBarSwipeLayout.addDrag(SwipeLayout.DragEdge.Bottom, v.findViewById(R.id.navigationSwipeBottomLayout));
 
         //Listeners
         mAdapter.registerItemActionsListener(this);
         currentDictionaryLayout.setOnClickListener(this);
         sortBtn.setOnClickListener(this);
         removeCurrentDictBtn.setOnClickListener(this);
+        removeAllDictionaries.setOnClickListener(this);
 
         //Logic init
         update();
@@ -291,6 +299,28 @@ public class DictionariesFragment extends Fragment implements ItemActionsListene
                 mAdapter.notifyDataSetChanged();
                 break;
 
+            case R.id.deleteAllDictionariesBtn:
+
+                new MaterialDialog.Builder(getActivity())
+                        .title(R.string.delete)
+                        .content(R.string.are_you_sure_to_delete_all)
+                        .positiveText(R.string.yes)
+                        .negativeText(R.string.no)
+                        .callback(new MaterialDialog.ButtonCallback() {
+                            @Override
+                            public void onPositive(MaterialDialog dialog) {
+                                super.onPositive(dialog);
+                                for (Dictionary dictionary : dictionaries) {
+                                    dictionary.getFile().delete();
+                                }
+                                setDictionary(null);
+                                update();
+                            }
+                        })
+                        .show();
+
+                break;
+
             case R.id.sortBtn:
 
                 PopupMenu popupMenu = new PopupMenu(getActivity(), v);
@@ -300,7 +330,7 @@ public class DictionariesFragment extends Fragment implements ItemActionsListene
                         final int finalCurrentSorting = sortingMethod;
 
 
-                        switch (item.getItemId()){
+                        switch (item.getItemId()) {
                             case R.id.item_noSort:
                                 sortingMethod = SortingMethods.NO_SORTING;
                                 break;

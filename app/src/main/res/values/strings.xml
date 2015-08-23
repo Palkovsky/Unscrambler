@@ -49,4 +49,6 @@
     <string name="name_starts_with_wrong_name">Name can\'t start with that name</string>
     <string name="name_contains_disallowed_char">Name contains disallowed characters</string>
     <string name="name_too_long">Name is too long</string>
+    <string name="delete_all">Remove all dictionaries</string>
+    <string name="are_you_sure_to_delete_all">Are you sure to delete ALL dictionaries?</string>
 </resources>
