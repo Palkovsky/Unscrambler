@@ -73,19 +73,24 @@ public class DictionaryListAdapter extends BaseAdapter {
 
         final Dictionary dictionary = getItem(position);
 
-        if(DictionaryUtils.isCurrentDictionary(context, dictionary)){
+        if (DictionaryUtils.isCurrentDictionary(context, dictionary)) {
             setViewBackground(mViewHolder.topWrapper, ContextCompat.getDrawable(context, R.drawable.item_selector_highlited));
             mViewHolder.setBtn.setBootstrapButtonEnabled(false);
             mViewHolder.setBtn.setBootstrapType("default");
-        }else{
+        } else {
             setViewBackground(mViewHolder.topWrapper, ContextCompat.getDrawable(context, R.drawable.item_selector_white));
             mViewHolder.setBtn.setBootstrapButtonEnabled(true);
             mViewHolder.setBtn.setBootstrapType("success");
         }
 
+        int wordCount = dictionary.getWordCount();
         mViewHolder.tvTitle.setText(dictionary.getName());
-        mViewHolder.tvWordsCount.setText(String.valueOf(dictionary.getWordCount()));
-        mViewHolder.tvFirstWords.setText(dictionary.getFirstNWordsInString(FIRST_WORDS_TO_LOAD));
+        mViewHolder.tvWordsCount.setText(String.valueOf(wordCount));
+
+        if (wordCount == 0)
+            mViewHolder.tvFirstWords.setText("...");
+        else
+            mViewHolder.tvFirstWords.setText(dictionary.getFirstNWordsInString(FIRST_WORDS_TO_LOAD));
 
         mViewHolder.topWrapper.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,7 +120,7 @@ public class DictionaryListAdapter extends BaseAdapter {
         mViewHolder.setBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(itemActionsListener!=null)
+                if (itemActionsListener != null)
                     itemActionsListener.setItemAction(position);
             }
         });
@@ -123,7 +128,6 @@ public class DictionaryListAdapter extends BaseAdapter {
 
         return convertView;
     }
-
 
 
     private Context getContext() {

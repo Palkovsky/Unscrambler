@@ -32,13 +32,13 @@
 
             <LinearLayout
                 android:id="@+id/nameContainer"
-                android:layout_toLeftOf="@+id/removeCurrentDictBtn"
-                android:layout_toStartOf="@+id/removeCurrentDictBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:layout_toEndOf="@+id/currentDictionaryWordCount"
+                android:layout_toLeftOf="@+id/removeCurrentDictBtn"
                 android:layout_toRightOf="@+id/currentDictionaryWordCount"
+                android:layout_toStartOf="@+id/removeCurrentDictBtn"
                 android:orientation="horizontal">
 
                 <TextView
@@ -57,26 +57,26 @@
 
             <TextView
                 android:id="@+id/currentDictionaryFirstWords"
-                android:layout_toLeftOf="@+id/removeCurrentDictBtn"
-                android:layout_toStartOf="@+id/removeCurrentDictBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/nameContainer"
                 android:layout_marginBottom="16dp"
                 android:layout_marginTop="8dp"
+                android:textColor="@android:color/darker_gray"
                 android:layout_toEndOf="@+id/currentDictionaryWordCount"
+                android:layout_toLeftOf="@+id/removeCurrentDictBtn"
                 android:layout_toRightOf="@+id/currentDictionaryWordCount"
+                android:layout_toStartOf="@+id/removeCurrentDictBtn"
                 android:textAppearance="@android:style/TextAppearance.Small" />
-
 
 
             <com.beardedhen.androidbootstrap.BootstrapButton
                 android:id="@+id/removeCurrentDictBtn"
-                android:layout_margin="@dimen/activity_vertical_margin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
+                android:layout_margin="@dimen/activity_vertical_margin"
                 android:text=""
                 bootstrap:bb_icon_right="fa-remove"
                 bootstrap:bb_type="danger" />
@@ -84,37 +84,54 @@
         </RelativeLayout>
 
         <View
-            android:layout_below="@+id/currentDictionaryInfo"
             android:id="@+id/currentDirctionaryNavigationBarDivider"
             android:layout_width="match_parent"
             android:layout_height="2dp"
+            android:layout_below="@+id/currentDictionaryInfo"
             android:background="#c0c0c0" />
 
         <RelativeLayout
             android:id="@+id/navigationBarContainer"
-            android:layout_below="@+id/currentDirctionaryNavigationBarDivider"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/currentDirctionaryNavigationBarDivider"
             android:background="@color/dark_gray">
 
-            <TextView
-                android:layout_centerVertical="true"
-                android:layout_margin="8dp"
-                android:id="@+id/dictionariesCountTextView"
-                android:textAppearance="@android:style/TextAppearance.Medium"
+            <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true">
+
+                <TextView
+                    android:id="@+id/dictionariesCountTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginStart="8dp"
+                    android:textAppearance="@android:style/TextAppearance.Medium" />
+
+                <TextView
+                    android:id="@+id/dictionariesSortingMethodTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/dictionariesCountTextView"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:textAppearance="@android:style/TextAppearance.Small" />
+            </RelativeLayout>
 
             <com.beardedhen.androidbootstrap.BootstrapButton
                 android:id="@+id/sortBtn"
-                android:layout_marginRight="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="8dp"
                 android:text=""
                 bootstrap:bb_icon_right="fa-sort"
                 bootstrap:bb_type="default" />
@@ -122,10 +139,10 @@
         </RelativeLayout>
 
         <View
-            android:layout_below="@+id/navigationBarContainer"
             android:id="@+id/navigationBarContainerListViewDivider"
             android:layout_width="match_parent"
             android:layout_height="2dp"
+            android:layout_below="@+id/navigationBarContainer"
             android:background="#c0c0c0" />
 
         <com.nirhart.parallaxscroll.views.ParallaxListView

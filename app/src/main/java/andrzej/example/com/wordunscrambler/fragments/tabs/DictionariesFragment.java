@@ -5,10 +5,16 @@ import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.internal.widget.AdapterViewCompat;
+import android.support.v7.widget.PopupMenu;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -21,6 +27,7 @@ import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.nirhart.parallaxscroll.views.ParallaxListView;
 
 import java.io.File;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -59,6 +66,7 @@ public class DictionariesFragment extends Fragment implements ItemActionsListene
     TextView currentWordCount;
     TextView currentFirstWords;
     TextView dictionariesSizeTv;
+    TextView dictionariesSortingMethodTv;
     BootstrapButton sortBtn;
     BootstrapButton removeCurrentDictBtn;
     ParallaxListView dictionariesListView;
@@ -89,7 +97,7 @@ public class DictionariesFragment extends Fragment implements ItemActionsListene
 
         if (dictionaries.size() > 0)
             dictionariesListView.setSelection(TabsConfig.CURRENT_DICTIONARY_POSITION);
-         else
+        else
             TabsConfig.CURRENT_DICTIONARY_POSITION = 0;
     }
 
@@ -108,6 +116,7 @@ public class DictionariesFragment extends Fragment implements ItemActionsListene
         currentWordCount = (TextView) v.findViewById(R.id.currentDictionaryWordCount);
         currentFirstWords = (TextView) v.findViewById(R.id.currentDictionaryFirstWords);
         dictionariesSizeTv = (TextView) v.findViewById(R.id.dictionariesCountTextView);
+        dictionariesSortingMethodTv = (TextView) v.findViewById(R.id.dictionariesSortingMethodTextView);
         snackbarCoordinatorLayout = (CoordinatorLayout) v.findViewById(R.id.snackbarCoordinatorLayout);
         sortBtn = (BootstrapButton) v.findViewById(R.id.sortBtn);
         removeCurrentDictBtn = (BootstrapButton) v.findViewById(R.id.removeCurrentDictBtn);
@@ -143,11 +152,11 @@ public class DictionariesFragment extends Fragment implements ItemActionsListene
         if (currentDictionary == null) {
             removeCurrentDictBtn.setVisibility(View.GONE);
             currentDictionaryLayout.setClickable(false);
-        }else {
+        } else {
             removeCurrentDictBtn.setVisibility(View.VISIBLE);
             currentDictionaryLayout.setClickable(true);
 
-            if(!currentDictionary.getFile().exists())
+            if (!currentDictionary.getFile().exists())
                 setDictionary(null);
         }
 
@@ -170,20 +179,29 @@ public class DictionariesFragment extends Fragment implements ItemActionsListene
 
         if (dictionaries.size() > 0) {
             switch (sortingMethod) {
+
+                case SortingMethods.NO_SORTING:
+                    dictionariesSortingMethodTv.setText(R.string.no_sorting);
+                    break;
+
                 case SortingMethods.SORTING_BY_WORDS_COUNT:
                     Collections.sort(dictionaries, new WordCountComparator());
+                    dictionariesSortingMethodTv.setText(R.string.wordsAscCount);
                     break;
 
                 case SortingMethods.SORTING_BY_WORDS_COUNT_DESC:
                     Collections.sort(dictionaries, new WordCountDescComparator());
+                    dictionariesSortingMethodTv.setText(R.string.wordsDescCount);
                     break;
 
                 case SortingMethods.SORTING_BY_NAME:
                     Collections.sort(dictionaries, new NameComparator());
+                    dictionariesSortingMethodTv.setText(R.string.fromAtoZsorting);
                     break;
 
                 case SortingMethods.SORTING_BY_NAME_DESC:
                     Collections.sort(dictionaries, new NameComparatorDesc());
+                    dictionariesSortingMethodTv.setText(R.string.fromZtoAsorting);
                     break;
             }
         }
@@ -201,9 +219,16 @@ public class DictionariesFragment extends Fragment implements ItemActionsListene
             currentDictionaryLayout.setClickable(false);
             DictionaryUtils.setDictionaryPreference(getActivity(), null);
         } else {
+            int wordsCount = dictionary.getWordCount();
+
             currentName.setText(dictionary.getName());
-            currentWordCount.setText(String.valueOf(dictionary.getWordsCount()));
-            currentFirstWords.setText(dictionary.getFirstNWordsInString(DictionaryListAdapter.FIRST_WORDS_TO_LOAD));
+            currentWordCount.setText(String.valueOf(wordsCount));
+
+            if (wordsCount == 0)
+                currentFirstWords.setText("...");
+            else
+                currentFirstWords.setText(dictionary.getFirstNWordsInString(DictionaryListAdapter.FIRST_WORDS_TO_LOAD));
+
             removeCurrentDictBtn.setVisibility(View.VISIBLE);
             removeCurrentDictBtn.setVisibility(View.VISIBLE);
             currentDictionaryLayout.setClickable(true);
@@ -268,6 +293,47 @@ public class DictionariesFragment extends Fragment implements ItemActionsListene
 
             case R.id.sortBtn:
 
+                PopupMenu popupMenu = new PopupMenu(getActivity(), v);
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        final int finalCurrentSorting = sortingMethod;
+
+
+                        switch (item.getItemId()){
+                            case R.id.item_noSort:
+                                sortingMethod = SortingMethods.NO_SORTING;
+                                break;
+
+                            case R.id.item_AZ:
+                                sortingMethod = SortingMethods.SORTING_BY_NAME;
+                                break;
+
+                            case R.id.item_ZA:
+                                sortingMethod = SortingMethods.SORTING_BY_NAME_DESC;
+                                break;
+
+                            case R.id.item_wordCountAsc:
+                                sortingMethod = SortingMethods.SORTING_BY_WORDS_COUNT;
+                                break;
+
+                            case R.id.item_wordCountDesc:
+                                sortingMethod = SortingMethods.SORTING_BY_WORDS_COUNT_DESC;
+                                break;
+                        }
+
+                        if (finalCurrentSorting != sortingMethod) {
+                            update();
+                            dictionariesListView.setSelection(0);
+                        }
+                        return true;
+                    }
+                });
+                popupMenu.inflate(R.menu.sort_popup);
+                popupMenu.show();
+
+
+                /*
                 final int finalCurrentSorting = sortingMethod;
 
                 new MaterialDialog.Builder(getActivity())
@@ -307,6 +373,8 @@ public class DictionariesFragment extends Fragment implements ItemActionsListene
                         })
                         .positiveText(R.string.choose)
                         .show();
+
+                        */
                 break;
         }
     }

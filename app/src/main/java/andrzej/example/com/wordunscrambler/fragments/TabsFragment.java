@@ -107,8 +107,6 @@ public class TabsFragment extends BackHandledFragment implements ViewPager.OnPag
     public void onPageSelected(int position) {
         TabsConfig.CURRENT_TAB_NUM = position;
 
-        Log.e(null, "onPageSelected called");
-
         switch (position) {
             //Unscramble fragment
             case 0:

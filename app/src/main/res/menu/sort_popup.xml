@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/item_noSort"
+        app:showAsAction="ifRoom|withText"
+        android:title="@string/no_sorting"
+        android:visible="true"/>
+    <item
+        android:id="@+id/item_AZ"
+        app:showAsAction="ifRoom|withText"
+        android:title="@string/fromAtoZsorting"
+        android:visible="true"/>
+    <item
+        android:id="@+id/item_ZA"
+        app:showAsAction="ifRoom|withText"
+        android:title="@string/fromZtoAsorting"
+        android:visible="true"/>
+
+    <item
+        android:id="@+id/item_wordCountAsc"
+        app:showAsAction="ifRoom|withText"
+        android:title="@string/wordsAscCount"
+        android:visible="true"/>
+
+    <item
+        android:id="@+id/item_wordCountDesc"
+        app:showAsAction="ifRoom|withText"
+        android:title="@string/wordsDescCount"
+        android:visible="true"/>
+
+</menu>

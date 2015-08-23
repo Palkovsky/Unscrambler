@@ -4,9 +4,13 @@ import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -16,7 +20,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 
 import andrzej.example.com.wordunscrambler.R;
 import andrzej.example.com.wordunscrambler.config.TabsConfig;
@@ -27,16 +30,22 @@ import andrzej.example.com.wordunscrambler.utils.DictionaryUtils;
 import andrzej.example.com.wordunscrambler.utils.PathObject;
 import andrzej.example.com.wordunscrambler.views.MaterialEditText;
 
-public class DictionaryActivity extends AppCompatActivity {
+public class DictionaryActivity extends AppCompatActivity implements TextWatcher {
 
     public static final String DICTIONARY_PATH_BUNDLE_KEY = "dictionary_path";
+    private static final int MAX_NAME_LEN = 20;
+
+    private static final String[] disallowedChars = {"/", "\\", "?", ",", "&", "^", "!", ">", "<", "..", "~"};
 
     //UI elements declaration
     Toolbar toolbar;
+    TextView wordsCountTextView;
     MaterialEditText dictionaryNameEditor;
     RichEditText dictionaryContentEditor;
 
     Dictionary dictionary;
+
+    private int wordsCount = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +65,7 @@ public class DictionaryActivity extends AppCompatActivity {
 
         //UI init
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        wordsCountTextView = (TextView) findViewById(R.id.wordsCountTextView);
         dictionaryNameEditor = (MaterialEditText) findViewById(R.id.dictionaryNameEditor);
         dictionaryContentEditor = (RichEditText) findViewById(R.id.dictionaryContentEditor);
 
@@ -63,6 +73,9 @@ public class DictionaryActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
+
+
+        dictionaryContentEditor.addTextChangedListener(this);
 
         update();
     }
@@ -74,6 +87,20 @@ public class DictionaryActivity extends AppCompatActivity {
             dictionaryContentEditor.setText(Converter.getTextFileContents(dictionary.getFile()));
         else
             dictionaryNameEditor.requestFocus();
+
+        updateWordsCount();
+    }
+
+    private void updateWordsCount() {
+        String[] chunks = dictionaryContentEditor.getText().toString().split("\\s+");
+        int len = chunks.length;
+        if (len == 1) {
+            if (chunks[0].trim().equals(""))
+                wordsCountTextView.setText("(" + String.valueOf(0) + ")");
+            else
+                wordsCountTextView.setText("(" + String.valueOf(len) + ")");
+        } else
+            wordsCountTextView.setText("(" + String.valueOf(len) + ")");
     }
 
     @Override
@@ -112,6 +139,9 @@ public class DictionaryActivity extends AppCompatActivity {
             case R.id.menu_saveDictionary:
                 //Save logic
                 TabsConfig.CURRENT_TAB_NUM = 1;
+
+                String nameString = dictionaryNameEditor.getText().toString();
+
                 if (dictionary.getFile() == null) {
                     String name = ensureName(dictionaryNameEditor.getText().toString()).trim();
                     String content = dictionaryContentEditor.getText().toString().trim();
@@ -129,10 +159,15 @@ public class DictionaryActivity extends AppCompatActivity {
                         }
                     }
 
+
                     if (dictionaryNameEditor.getText().toString().equals(""))
                         Toast.makeText(getApplicationContext(), R.string.empty_name, Toast.LENGTH_SHORT).show();
-                    else if (dictionaryNameEditor.getText().toString().startsWith("."))
-                        Toast.makeText(getApplicationContext(), R.string.dot_name, Toast.LENGTH_SHORT).show();
+                    else if(stringContainsItemFromList(dictionaryNameEditor.getText().toString(), disallowedChars))
+                        Toast.makeText(getApplicationContext(), R.string.name_contains_disallowed_char, Toast.LENGTH_SHORT).show();
+                    else if (nameString.startsWith(".") || nameString.startsWith("/") || nameString.toString().startsWith("\\") || nameString.toString().startsWith("~"))
+                        Toast.makeText(getApplicationContext(), R.string.name_starts_with_wrong_name, Toast.LENGTH_SHORT).show();
+                    else if(nameString.trim().length()>MAX_NAME_LEN)
+                        Toast.makeText(getApplicationContext(), R.string.name_too_long, Toast.LENGTH_SHORT).show();
                     else if (freeToEdit) {
                         File newFile = new File(name);
                         try {
@@ -157,7 +192,6 @@ public class DictionaryActivity extends AppCompatActivity {
                 } else {
 
 
-
                     String name = ensureName(dictionaryNameEditor.getText().toString()).trim();
                     String content = dictionaryContentEditor.getText().toString().trim();
 
@@ -179,8 +213,13 @@ public class DictionaryActivity extends AppCompatActivity {
 
                         if (dictionaryNameEditor.getText().toString().equals(""))
                             Toast.makeText(getApplicationContext(), R.string.empty_name, Toast.LENGTH_SHORT).show();
-                        else if (dictionaryNameEditor.getText().toString().startsWith("."))
-                            Toast.makeText(getApplicationContext(), R.string.dot_name, Toast.LENGTH_SHORT).show();
+                        else if(stringContainsItemFromList(dictionaryNameEditor.getText().toString(), disallowedChars))
+                            Toast.makeText(getApplicationContext(), R.string.name_contains_disallowed_char, Toast.LENGTH_SHORT).show();
+                        else if (nameString.startsWith(".") || nameString.startsWith("/") || nameString.toString().startsWith("\\") || nameString.toString().startsWith("~"))
+                            Toast.makeText(getApplicationContext(), R.string.name_starts_with_wrong_name, Toast.LENGTH_SHORT).show();
+                        else if(nameString.trim().length()>MAX_NAME_LEN)
+                            Toast.makeText(getApplicationContext(), R.string.name_too_long, Toast.LENGTH_SHORT).show();
+
                         else if (freeToEdit) {
 
                             boolean updatePrefs = false;
@@ -197,7 +236,10 @@ public class DictionaryActivity extends AppCompatActivity {
 
 
                             dictionary.setName(name);
-                            dictionary.getFile().renameTo(directory);
+                            if (name.equals(dictionary.getFile().getName()))
+                                dictionary.getFile().renameTo(directory);
+                            else
+                                dictionary.getFile().delete();
                             dictionary.setFile(directory);
 
 
@@ -241,9 +283,29 @@ public class DictionaryActivity extends AppCompatActivity {
         return false;
     }
 
+    private boolean stringContainsItemFromList(String inputString, String[] items) {
+        for (int i = 0; i < items.length; i++) {
+            if (inputString.contains(items[i])) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     protected void onPause() {
         super.onPause();
         TabsConfig.CURRENT_TAB_NUM = 1;
     }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+        updateWordsCount();
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+    @Override
+    public void afterTextChanged(Editable s) {}
 }

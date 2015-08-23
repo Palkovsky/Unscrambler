@@ -39,8 +39,6 @@ public class TabsAdapter extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int position) {
 
-        Log.e(null, "Get Item called");
-
         if (position == 0) {
             UnscrambleFragment unscrambleFragment = new UnscrambleFragment();
 
