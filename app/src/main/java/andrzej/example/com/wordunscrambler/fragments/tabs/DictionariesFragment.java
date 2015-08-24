@@ -1,27 +1,19 @@
 package andrzej.example.com.wordunscrambler.fragments.tabs;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v7.internal.widget.AdapterViewCompat;
 import android.support.v7.widget.PopupMenu;
-import android.util.Log;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.beardedhen.androidbootstrap.BootstrapButton;
@@ -29,22 +21,20 @@ import com.daimajia.swipe.SwipeLayout;
 import com.nirhart.parallaxscroll.views.ParallaxListView;
 
 import java.io.File;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import andrzej.example.com.wordunscrambler.R;
 import andrzej.example.com.wordunscrambler.activities.DictionaryActivity;
-import andrzej.example.com.wordunscrambler.adapters.DictionaryListAdapter;
 import andrzej.example.com.wordunscrambler.adapters.SwipeDictionaryListAdapter;
-import andrzej.example.com.wordunscrambler.config.OrderingMethods;
 import andrzej.example.com.wordunscrambler.config.SortingMethods;
 import andrzej.example.com.wordunscrambler.config.TabsConfig;
+import andrzej.example.com.wordunscrambler.interfaces.DictionariesInitEndListener;
 import andrzej.example.com.wordunscrambler.interfaces.ItemActionsListener;
 import andrzej.example.com.wordunscrambler.models.Dictionary;
-import andrzej.example.com.wordunscrambler.utils.Converter;
 import andrzej.example.com.wordunscrambler.utils.DictionaryUtils;
+import andrzej.example.com.wordunscrambler.utils.InitDictionaryListAsync;
 import andrzej.example.com.wordunscrambler.utils.NameComparator;
 import andrzej.example.com.wordunscrambler.utils.NameComparatorDesc;
 import andrzej.example.com.wordunscrambler.utils.WordCountComparator;
@@ -70,6 +60,7 @@ public class DictionariesFragment extends Fragment implements ItemActionsListene
     TextView currentFirstWords;
     TextView dictionariesSizeTv;
     TextView dictionariesSortingMethodTv;
+    ProgressBar dictionariesProgressBar;
     BootstrapButton sortBtn;
     BootstrapButton removeCurrentDictBtn;
     BootstrapButton removeAllDictionaries;
@@ -82,6 +73,10 @@ public class DictionariesFragment extends Fragment implements ItemActionsListene
     //Array
     List<Dictionary> dictionaries = new ArrayList<>();
     List<File> filesDirectory = new ArrayList<>();
+
+    //Flags
+    public static boolean paused = false;
+    public static boolean updateCurrent = false;
 
     public DictionariesFragment() {
         // Required empty public constructor
@@ -98,12 +93,16 @@ public class DictionariesFragment extends Fragment implements ItemActionsListene
     public void onResume() {
         super.onResume();
 
-        update();
+        if (paused)
+            paused = false;
+        else {
+            update();
 
-        if (dictionaries.size() > 0)
-            dictionariesListView.setSelection(TabsConfig.CURRENT_DICTIONARY_POSITION);
-        else
-            TabsConfig.CURRENT_DICTIONARY_POSITION = 0;
+            if (dictionaries.size() > 0)
+                dictionariesListView.setSelection(TabsConfig.CURRENT_DICTIONARY_POSITION);
+            else
+                TabsConfig.CURRENT_DICTIONARY_POSITION = 0;
+        }
     }
 
     @Override
@@ -122,6 +121,7 @@ public class DictionariesFragment extends Fragment implements ItemActionsListene
         currentFirstWords = (TextView) v.findViewById(R.id.currentDictionaryFirstWords);
         dictionariesSizeTv = (TextView) v.findViewById(R.id.dictionariesCountTextView);
         dictionariesSortingMethodTv = (TextView) v.findViewById(R.id.dictionariesSortingMethodTextView);
+        dictionariesProgressBar = (ProgressBar) v.findViewById(R.id.dictionariesProgressBar);
         snackbarCoordinatorLayout = (CoordinatorLayout) v.findViewById(R.id.snackbarCoordinatorLayout);
         sortBtn = (BootstrapButton) v.findViewById(R.id.sortBtn);
         removeCurrentDictBtn = (BootstrapButton) v.findViewById(R.id.removeCurrentDictBtn);
@@ -141,20 +141,11 @@ public class DictionariesFragment extends Fragment implements ItemActionsListene
         removeAllDictionaries.setOnClickListener(this);
 
         //Logic init
-        update();
 
         return v;
     }
 
-
-    private void update() {
-
-        // Get local files
-        File directory = new File(getActivity().getApplicationInfo().dataDir + "/" + FILES_DIR);
-
-        dictionaries.clear();
-        filesDirectory.clear();
-
+    private void updateCurrentDictionary() {
         Dictionary currentDictionary = DictionaryUtils.getCurrentDictionary(getActivity());
         setDictionary(currentDictionary);
 
@@ -169,54 +160,79 @@ public class DictionariesFragment extends Fragment implements ItemActionsListene
             if (!currentDictionary.getFile().exists())
                 setDictionary(null);
         }
+    }
+
+    private void update() {
+
+        // Get local files
+        File directory = new File(getActivity().getApplicationInfo().dataDir + "/" + FILES_DIR);
+
+        dictionaries.clear();
+        filesDirectory.clear();
+
+        updateCurrentDictionary();
+
 
         if (directory.listFiles() != null && directory.listFiles().length > 0) {
             noDictionariesLayout.setVisibility(View.GONE);
             mainContentWrapper.setVisibility(View.VISIBLE);
             File[] listOfLocalFilesArray = directory.listFiles();
 
+
             // get the names of files
-            for (File file : listOfLocalFilesArray) {
-                filesDirectory.add(file);
-                dictionaries.add(new Dictionary(file.getName(), file));
-            }
+            final InitDictionaryListAsync initDictionaryListAsync = new InitDictionaryListAsync(dictionaries, listOfLocalFilesArray, dictionariesProgressBar);
+            initDictionaryListAsync.execute();
+            initDictionaryListAsync.setDictionariesInitEndListener(new DictionariesInitEndListener() {
+                @Override
+                public void onInitialize(List<Dictionary> dictionaryList) {
+
+
+                    if (dictionaries.size() > 0) {
+
+                        dictionariesSizeTv.setText(getResources().getString(R.string.dictionaries_colon) + " " + dictionaries.size());
+
+                        switch (sortingMethod) {
+
+                            case SortingMethods.NO_SORTING:
+                                dictionariesSortingMethodTv.setText(R.string.no_sorting);
+                                break;
+
+                            case SortingMethods.SORTING_BY_WORDS_COUNT:
+                                Collections.sort(dictionaries, new WordCountComparator());
+                                dictionariesSortingMethodTv.setText(R.string.wordsAscCount);
+                                break;
+
+                            case SortingMethods.SORTING_BY_WORDS_COUNT_DESC:
+                                Collections.sort(dictionaries, new WordCountDescComparator());
+                                dictionariesSortingMethodTv.setText(R.string.wordsDescCount);
+                                break;
+
+                            case SortingMethods.SORTING_BY_NAME:
+                                Collections.sort(dictionaries, new NameComparator());
+                                dictionariesSortingMethodTv.setText(R.string.fromAtoZsorting);
+                                break;
+
+                            case SortingMethods.SORTING_BY_NAME_DESC:
+                                Collections.sort(dictionaries, new NameComparatorDesc());
+                                dictionariesSortingMethodTv.setText(R.string.fromZtoAsorting);
+                                break;
+                        }
+                    }
+
+                    dictionariesProgressBar.setVisibility(View.GONE);
+                    mAdapter.notifyDataSetChanged();
+
+                    dictionariesListView.setSelection(TabsConfig.CURRENT_DICTIONARY_POSITION);
+                }
+            });
+
         } else {
+            dictionariesProgressBar.setVisibility(View.GONE);
             mainContentWrapper.setVisibility(View.GONE);
             noDictionariesLayout.setVisibility(View.VISIBLE);
         }
 
-        dictionariesSizeTv.setText(getResources().getString(R.string.dictionaries_colon) + " " + dictionaries.size());
 
-        if (dictionaries.size() > 0) {
-            switch (sortingMethod) {
-
-                case SortingMethods.NO_SORTING:
-                    dictionariesSortingMethodTv.setText(R.string.no_sorting);
-                    break;
-
-                case SortingMethods.SORTING_BY_WORDS_COUNT:
-                    Collections.sort(dictionaries, new WordCountComparator());
-                    dictionariesSortingMethodTv.setText(R.string.wordsAscCount);
-                    break;
-
-                case SortingMethods.SORTING_BY_WORDS_COUNT_DESC:
-                    Collections.sort(dictionaries, new WordCountDescComparator());
-                    dictionariesSortingMethodTv.setText(R.string.wordsDescCount);
-                    break;
-
-                case SortingMethods.SORTING_BY_NAME:
-                    Collections.sort(dictionaries, new NameComparator());
-                    dictionariesSortingMethodTv.setText(R.string.fromAtoZsorting);
-                    break;
-
-                case SortingMethods.SORTING_BY_NAME_DESC:
-                    Collections.sort(dictionaries, new NameComparatorDesc());
-                    dictionariesSortingMethodTv.setText(R.string.fromZtoAsorting);
-                    break;
-            }
-        }
-
-        mAdapter.notifyDataSetChanged();
     }
 
 
@@ -235,10 +251,9 @@ public class DictionariesFragment extends Fragment implements ItemActionsListene
             currentName.setText(dictionary.getName());
             currentWordCount.setText(String.valueOf(wordsCount));
 
-            if (wordsCount == 0)
-                currentFirstWords.setText("...");
-            else
-                currentFirstWords.setText(dictionary.getFirstNWordsInString(DictionaryListAdapter.FIRST_WORDS_TO_LOAD));
+
+            currentFirstWords.setText(dictionary.getFirstWords());
+
 
             removeCurrentDictBtn.setVisibility(View.VISIBLE);
             removeCurrentDictBtn.setVisibility(View.VISIBLE);
@@ -268,6 +283,8 @@ public class DictionariesFragment extends Fragment implements ItemActionsListene
                 getResources().getString(R.string.current_dictionary_colon) + " " + dictionaries.get(position).getName(),
                 Snackbar.LENGTH_SHORT);
         snackbar.show();
+
+        mAdapter.closeItem(position);
     }
 
     @Override
@@ -347,6 +364,7 @@ public class DictionariesFragment extends Fragment implements ItemActionsListene
                                 sortingMethod = SortingMethods.SORTING_BY_NAME_DESC;
                                 break;
 
+
                             case R.id.item_wordCountAsc:
                                 sortingMethod = SortingMethods.SORTING_BY_WORDS_COUNT;
                                 break;
@@ -354,6 +372,7 @@ public class DictionariesFragment extends Fragment implements ItemActionsListene
                             case R.id.item_wordCountDesc:
                                 sortingMethod = SortingMethods.SORTING_BY_WORDS_COUNT_DESC;
                                 break;
+
                         }
 
                         if (finalCurrentSorting != sortingMethod) {
@@ -413,4 +432,9 @@ public class DictionariesFragment extends Fragment implements ItemActionsListene
         }
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        paused = true;
+    }
 }

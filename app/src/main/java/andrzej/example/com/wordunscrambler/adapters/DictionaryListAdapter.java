@@ -88,10 +88,6 @@ public class DictionaryListAdapter extends BaseAdapter {
         mViewHolder.tvTitle.setText(dictionary.getName());
         mViewHolder.tvWordsCount.setText(String.valueOf(wordCount));
 
-        if (wordCount == 0)
-            mViewHolder.tvFirstWords.setText("...");
-        else
-            mViewHolder.tvFirstWords.setText(dictionary.getFirstNWordsInString(FIRST_WORDS_TO_LOAD));
 
         mViewHolder.topWrapper.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -143,7 +139,6 @@ public class DictionaryListAdapter extends BaseAdapter {
         BootstrapButton setBtn;
         TextView tvTitle;
         TextView tvWordsCount;
-        TextView tvFirstWords;
 
         public DictionaryItemViewHolder(View item) {
             rootLayout = (SwipeLayout) item.findViewById(R.id.rootLayout);
@@ -151,8 +146,7 @@ public class DictionaryListAdapter extends BaseAdapter {
             deleteBtn = (BootstrapButton) item.findViewById(R.id.deleteBtn);
             setBtn = (BootstrapButton) item.findViewById(R.id.setBtn);
             tvTitle = (TextView) item.findViewById(R.id.titleTv);
-            tvWordsCount = (TextView) item.findViewById(R.id.wordsCountTv);
-            tvFirstWords = (TextView) item.findViewById(R.id.firstWordsTv);
+            //tvWordsCount = (TextView) item.findViewById(R.id.wordsCountTv);
 
             //Swipe Layout config
             rootLayout.setShowMode(SwipeLayout.ShowMode.LayDown);

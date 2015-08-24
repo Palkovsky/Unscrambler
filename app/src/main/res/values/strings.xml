@@ -29,7 +29,8 @@
     <string name="dictionaries_colon">Dictionaries:</string>
     <string name="choose">Choose</string>
     <string name="no_sorting">No sorting</string>
-    <string name="fromAtoZsorting">A-Z</string>
+    <string name="fromAtoZsorting">Alphabetical</string>
+    <string name="fromZtoAsorting">Reverse alphabetical</string>
     <string name="wordsAscCount">Word Count Ascending</string>
     <string name="wordsDescCount">Word Count Descending</string>
     <string name="sorting">Sorting</string>

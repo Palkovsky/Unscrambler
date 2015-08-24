@@ -4,19 +4,19 @@
 
     <item
         android:id="@+id/item_noSort"
-        app:showAsAction="ifRoom|withText"
         android:title="@string/no_sorting"
-        android:visible="true"/>
+        android:visible="true"
+        app:showAsAction="ifRoom|withText" />
     <item
         android:id="@+id/item_AZ"
-        app:showAsAction="ifRoom|withText"
         android:title="@string/fromAtoZsorting"
-        android:visible="true"/>
+        android:visible="true"
+        app:showAsAction="ifRoom|withText" />
     <item
         android:id="@+id/item_ZA"
-        app:showAsAction="ifRoom|withText"
         android:title="@string/fromZtoAsorting"
-        android:visible="true"/>
+        android:visible="true"
+        app:showAsAction="ifRoom|withText" />
 
     <item
         android:id="@+id/item_wordCountAsc"
@@ -29,5 +29,4 @@
         app:showAsAction="ifRoom|withText"
         android:title="@string/wordsDescCount"
         android:visible="true"/>
-
 </menu>

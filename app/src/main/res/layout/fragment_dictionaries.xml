@@ -39,7 +39,7 @@
                 android:layout_toLeftOf="@+id/removeCurrentDictBtn"
                 android:layout_toRightOf="@+id/currentDictionaryWordCount"
                 android:layout_toStartOf="@+id/removeCurrentDictBtn"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -92,8 +92,8 @@
         <com.daimajia.swipe.SwipeLayout
             android:id="@+id/navigationBarSwipeLayout"
             android:layout_width="match_parent"
-            android:layout_below="@+id/currentDirctionaryNavigationBarDivider"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/currentDirctionaryNavigationBarDivider">
 
 
             <!-- Bottom View Beg-->
@@ -173,13 +173,29 @@
             android:layout_below="@+id/navigationBarSwipeLayout"
             android:background="#c0c0c0" />
 
-        <com.nirhart.parallaxscroll.views.ParallaxListView
-            android:id="@+id/dictionaryListView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+
+        <RelativeLayout
             android:layout_below="@+id/navigationBarContainerListViewDivider"
-            app:circular_parallax="true"
-            app:parallax_factor="1.6" />
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.nirhart.parallaxscroll.views.ParallaxListView
+                android:id="@+id/dictionaryListView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:circular_parallax="true"
+                app:parallax_factor="1.6" />
+
+            <ProgressBar
+                android:id="@+id/dictionariesProgressBar"
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:visibility="gone" />
+        </RelativeLayout>
     </RelativeLayout>
 
 

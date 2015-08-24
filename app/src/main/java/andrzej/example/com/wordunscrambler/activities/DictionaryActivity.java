@@ -115,9 +115,13 @@ public class DictionaryActivity extends AppCompatActivity implements TextWatcher
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
+        DictionariesFragment.paused = false;
+
         switch (id) {
 
             case R.id.menu_deleteDictionary:
+
+                DictionariesFragment.paused = false;
 
                 new MaterialDialog.Builder(this)
                         .title(R.string.delete)
@@ -139,6 +143,7 @@ public class DictionaryActivity extends AppCompatActivity implements TextWatcher
             case R.id.menu_saveDictionary:
                 //Save logic
                 TabsConfig.CURRENT_TAB_NUM = 1;
+                DictionariesFragment.paused = false;
 
                 String nameString = dictionaryNameEditor.getText().toString();
 
@@ -191,6 +196,7 @@ public class DictionaryActivity extends AppCompatActivity implements TextWatcher
 
                 } else {
 
+                    DictionariesFragment.updateCurrent = true;
 
                     String name = ensureName(dictionaryNameEditor.getText().toString()).trim();
                     String content = dictionaryContentEditor.getText().toString().trim();

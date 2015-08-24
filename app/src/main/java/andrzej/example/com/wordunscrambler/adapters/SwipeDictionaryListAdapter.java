@@ -57,7 +57,7 @@ public class SwipeDictionaryListAdapter extends BaseSwipeAdapter {
     public void fillValues(final int position, View convertView) {
         SwipeLayout rootLayout = (SwipeLayout) convertView.findViewById(R.id.rootLayout);
         RelativeLayout topWrapper = (RelativeLayout) convertView.findViewById(R.id.top_wrapper);
-        BootstrapButton  deleteBtn = (BootstrapButton) convertView.findViewById(R.id.deleteBtn);
+        BootstrapButton deleteBtn = (BootstrapButton) convertView.findViewById(R.id.deleteBtn);
         BootstrapButton setBtn = (BootstrapButton) convertView.findViewById(R.id.setBtn);
         TextView tvTitle = (TextView) convertView.findViewById(R.id.titleTv);
         TextView tvWordsCount = (TextView) convertView.findViewById(R.id.wordsCountTv);
@@ -86,10 +86,9 @@ public class SwipeDictionaryListAdapter extends BaseSwipeAdapter {
         tvTitle.setText(dictionary.getName());
         tvWordsCount.setText(String.valueOf(wordCount));
 
-        if (wordCount == 0)
-            tvFirstWords.setText("...");
-        else
-            tvFirstWords.setText(dictionary.getFirstNWordsInString(FIRST_WORDS_TO_LOAD));
+
+        tvFirstWords.setText(dictionary.getFirstWords());
+
 
         topWrapper.setOnClickListener(new View.OnClickListener() {
             @Override

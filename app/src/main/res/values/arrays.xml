@@ -7,5 +7,4 @@
         <item>@string/wordsAscCount</item> <!-- 3 -->
         <item>@string/wordsDescCount</item> <!-- 4 -->
     </string-array>
-    <string name="fromZtoAsorting">Z-A</string>
 </resources>

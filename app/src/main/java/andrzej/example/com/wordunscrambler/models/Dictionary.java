@@ -4,6 +4,7 @@ import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
 
+import andrzej.example.com.wordunscrambler.adapters.SwipeDictionaryListAdapter;
 import andrzej.example.com.wordunscrambler.utils.Converter;
 
 /**
@@ -16,6 +17,8 @@ public class Dictionary {
     private int wordCount;
     private boolean current = false;
 
+    private String firstWords;
+
     public Dictionary(String name, File file) {
         this.name = FilenameUtils.removeExtension(name);
         this.file = file;
@@ -23,14 +26,44 @@ public class Dictionary {
             this.wordCount = getWordsCount();
     }
 
-    public int getWordsCount() {
+    private int getWordsCount() {
         String[] chunks = getContentChunks();
 
-        if(chunks.length==1){
-            if(chunks[0].trim().equals(""))
-                return 0;
+        int wordsCount = 0;
+
+        if (chunks.length == 1) {
+            if (chunks[0].trim().equals(""))
+                wordsCount = 0;
+            else
+                wordsCount = chunks.length;
+        } else
+            wordsCount = chunks.length;
+
+        String firstWords = "";
+
+        int n = SwipeDictionaryListAdapter.FIRST_WORDS_TO_LOAD;
+        int nCopy = n;
+        if (n >= chunks.length)
+            n = chunks.length;
+
+
+        if (wordsCount == 0) {
+            firstWords = "...";
+        } else {
+            for (int i = 0; i < n; i++) {
+                if (i == 0)
+                    firstWords += chunks[i];
+                else
+                    firstWords += ", " + chunks[i];
+            }
+
+            if (nCopy < chunks.length)
+                firstWords += "...";
         }
-        return getContentChunks().length;
+
+        setFirstWords(firstWords);
+
+        return wordsCount;
     }
 
     public String[] getFirstNWords(int n) {
@@ -57,7 +90,7 @@ public class Dictionary {
             if (i == 0)
                 firstWords += words[i];
             else
-                firstWords += ", " + words[i];
+                firstWords += words[i];
         }
 
         if (nCopy < words.length)
@@ -101,5 +134,13 @@ public class Dictionary {
 
     public int getWordCount() {
         return wordCount;
+    }
+
+    private void setFirstWords(String firstWords) {
+        this.firstWords = firstWords;
+    }
+
+    public String getFirstWords() {
+        return firstWords;
     }
 }
