@@ -112,6 +112,12 @@ public class DictionaryActivity extends AppCompatActivity implements TextWatcher
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        DictionariesFragment.otherWindowOpened = true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 

@@ -76,6 +76,7 @@ public class DictionariesFragment extends Fragment implements ItemActionsListene
 
     //Flags
     public static boolean paused = false;
+    public static boolean otherWindowOpened = false;
     public static boolean updateCurrent = false;
 
     public DictionariesFragment() {

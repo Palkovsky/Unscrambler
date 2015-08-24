@@ -30,6 +30,7 @@ import java.util.List;
 import andrzej.example.com.wordunscrambler.R;
 import andrzej.example.com.wordunscrambler.adapters.FileListAdapter;
 import andrzej.example.com.wordunscrambler.config.TabsConfig;
+import andrzej.example.com.wordunscrambler.fragments.tabs.DictionariesFragment;
 import andrzej.example.com.wordunscrambler.interfaces.AsyncTaskListener;
 import andrzej.example.com.wordunscrambler.interfaces.ItemCheckedListener;
 import andrzej.example.com.wordunscrambler.models.FileItem;
@@ -299,8 +300,17 @@ public class BrowseFragment extends BackHandledFragment implements View.OnClickL
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        Log.e(null, "Browse fragment onResume");
+        DictionariesFragment.otherWindowOpened = true;
+    }
+
+    @Override
     public void onPause() {
         super.onPause();
+
+
         if (mActionMode != null)
             mActionMode.finish();
     }
