@@ -6,9 +6,18 @@
     tools:context="andrzej.example.com.wordunscrambler.fragments.tabs.UnscrambleFragment">
 
 
+
+
+    <FrameLayout
+        android:id="@+id/editFormSceneContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </FrameLayout>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/editFormSceneContainer"
         android:layout_centerHorizontal="true"
         android:layout_margin="4dp"
         android:text="Text test"

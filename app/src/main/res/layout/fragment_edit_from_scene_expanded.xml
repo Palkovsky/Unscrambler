@@ -1,0 +1,58 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/extendedFormRootLayout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:id="@+id/baseFormContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:orientation="horizontal">
+
+        <andrzej.example.com.wordunscrambler.views.MaterialEditText
+            android:id="@+id/scrambledWordEditor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="3dp"
+            android:hint="@string/scrambledWordHint"
+            android:inputType="textNoSuggestions"
+            android:lines="1"
+            android:maxLines="1"
+            android:singleLine="true"
+            app:met_baseColor="@android:color/black"
+            app:met_clearButton="true"
+            app:met_errorColor="#ddaa00"
+            app:met_primaryColor="@color/list_item_highlight" />
+
+
+        <Button
+            android:id="@+id/expandFormBtn"
+            android:layout_gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Expand" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/extendedFormContainer"
+        android:layout_below="@+id/baseFormContainer"
+        android:layout_width="match_parent"
+        android:layout_height="240dp"
+        android:background="@android:color/white"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_gravity="center"
+            android:text="Placeholder for filtering edit texts"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+</RelativeLayout>
+
