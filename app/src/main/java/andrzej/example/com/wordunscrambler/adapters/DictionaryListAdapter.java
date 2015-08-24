@@ -19,6 +19,7 @@ import java.util.List;
 
 import andrzej.example.com.wordunscrambler.R;
 import andrzej.example.com.wordunscrambler.config.TabsConfig;
+import andrzej.example.com.wordunscrambler.config.ViewsConfig;
 import andrzej.example.com.wordunscrambler.interfaces.ItemActionsListener;
 import andrzej.example.com.wordunscrambler.models.Dictionary;
 import andrzej.example.com.wordunscrambler.utils.DictionaryUtils;
@@ -28,7 +29,7 @@ import andrzej.example.com.wordunscrambler.utils.DictionaryUtils;
  */
 public class DictionaryListAdapter extends BaseAdapter {
 
-    public static final int FIRST_WORDS_TO_LOAD = 4;
+    public static final int FIRST_WORDS_TO_LOAD = ViewsConfig.FIRST_WORDS_TO_LOAD;
 
     private Context context;
     private List<Dictionary> mDataset;

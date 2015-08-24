@@ -1,6 +1,7 @@
 package andrzej.example.com.wordunscrambler.fragments.tabs;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
@@ -36,6 +37,7 @@ import java.util.List;
 import andrzej.example.com.wordunscrambler.R;
 import andrzej.example.com.wordunscrambler.activities.DictionaryActivity;
 import andrzej.example.com.wordunscrambler.adapters.DictionaryListAdapter;
+import andrzej.example.com.wordunscrambler.adapters.SwipeDictionaryListAdapter;
 import andrzej.example.com.wordunscrambler.config.OrderingMethods;
 import andrzej.example.com.wordunscrambler.config.SortingMethods;
 import andrzej.example.com.wordunscrambler.config.TabsConfig;
@@ -75,7 +77,7 @@ public class DictionariesFragment extends Fragment implements ItemActionsListene
     SwipeLayout navigationBarSwipeLayout;
 
     //Adapter
-    DictionaryListAdapter mAdapter;
+    SwipeDictionaryListAdapter mAdapter;
 
     //Array
     List<Dictionary> dictionaries = new ArrayList<>();
@@ -89,7 +91,7 @@ public class DictionariesFragment extends Fragment implements ItemActionsListene
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //Init adapter
-        mAdapter = new DictionaryListAdapter(getActivity(), dictionaries);
+        mAdapter = new SwipeDictionaryListAdapter(getActivity(), dictionaries);
     }
 
     @Override
@@ -217,6 +219,7 @@ public class DictionariesFragment extends Fragment implements ItemActionsListene
         mAdapter.notifyDataSetChanged();
     }
 
+
     private void setDictionary(Dictionary dictionary) {
         if (dictionary == null) {
             currentName.setText("---");
@@ -275,6 +278,7 @@ public class DictionariesFragment extends Fragment implements ItemActionsListene
         dictionaryToRemove.removeFile();
         dictionaries.remove(position);
         update();
+        mAdapter.closeItem(position);
     }
 
     private void transferToDictionaryActivity(Dictionary dictionary) {
