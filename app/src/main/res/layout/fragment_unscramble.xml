@@ -1,23 +1,24 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:expandable="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="andrzej.example.com.wordunscrambler.fragments.tabs.UnscrambleFragment">
 
 
-
-
-    <FrameLayout
-        android:id="@+id/editFormSceneContainer"
+    <andrzej.example.com.wordunscrambler.views.ExpandableLayout
+        android:id="@+id/formExpandableLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </FrameLayout>
+        android:layout_height="wrap_content"
+        expandable:el_headerLayout="@layout/form_header_layout"
+        expandable:el_contentLayout="@layout/form_content_layout"
+        android:background="@android:color/white"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/editFormSceneContainer"
+        android:layout_below="@+id/formExpandableLayout"
         android:layout_centerHorizontal="true"
         android:layout_margin="4dp"
         android:text="Text test"
