@@ -5,10 +5,12 @@ package andrzej.example.com.wordunscrambler.models;
  */
 public class FileItem {
     private String name;
+    private String path;
     private boolean directory;
 
-    public FileItem(String name, boolean directory) {
+    public FileItem(String name, String path, boolean directory) {
         this.name = name;
+        this.path = path;
         this.directory = directory;
     }
 
@@ -26,5 +28,13 @@ public class FileItem {
 
     public void setDirectory(boolean directory) {
         this.directory = directory;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 }

@@ -118,9 +118,9 @@ public class BrowseFragment extends BackHandledFragment implements View.OnClickL
 
             if (!fileItem.isDirectory()) {
                 if (path.testFileExtension(file))
-                    files.add(new FileItem(file, fileItem.isDirectory()));
+                    files.add(new FileItem(file, fileItem.getPath(),fileItem.isDirectory()));
             } else
-                files.add(new FileItem(file, fileItem.isDirectory()));
+                files.add(new FileItem(file, fileItem.getPath(),fileItem.isDirectory()));
         }
 
         if (files.size() == 0)
@@ -302,7 +302,6 @@ public class BrowseFragment extends BackHandledFragment implements View.OnClickL
     @Override
     public void onResume() {
         super.onResume();
-        Log.e(null, "Browse fragment onResume");
         DictionariesFragment.otherWindowOpened = true;
     }
 
@@ -456,15 +455,15 @@ public class BrowseFragment extends BackHandledFragment implements View.OnClickL
         protected List<File> doInBackground(Void... params) {
 
             while (running) {
-                List<String> paths = new ArrayList<>();
 
+                List<String> paths = new ArrayList<>();
                 List<File> files = new ArrayList<>();
 
                 for (FileItem file : selectedFiles) {
                     if (file.isDirectory())
                         paths.add(path.getDirectory(file.getName()));
                     else
-                        files.add(new File(file.getName()));
+                        files.add(new File(file.getPath()));
                 }
 
                 FilesFinder finder = new FilesFinder(path.getPath());

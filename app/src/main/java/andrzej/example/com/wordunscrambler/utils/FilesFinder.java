@@ -50,6 +50,7 @@ public class FilesFinder {
                 if (tempFiles.size() > 0)
                     files.addAll(tempFiles);
             } else {
+                Log.e(null, "File: " + file.getName());
                 String extension = FilenameUtils.getExtension(file.getName());
                 if (Arrays.asList(PathObject.WHITELISTED_EXTENSIONS).contains(extension))
                     files.add(file);
