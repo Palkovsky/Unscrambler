@@ -54,4 +54,14 @@
     <string name="are_you_sure_to_delete_all">Are you sure to delete ALL dictionaries?</string>
     <string name="unscrambleWordHint">Enter a scrambled word</string>
     <string name="scrambledWordHint">Enter scrambled word here</string>
+    <string name="expand">Expand</string>
+    <string name="collapse">Collapse</string>
+    <string name="unscramble">Unscramble</string>
+    <string name="startsWithLabel">Starts with</string>
+    <string name="endsWithLabel">Ends with</string>
+    <string name="containsLabel">Contains</string>
+    <string name="lengthLabel">Length</string>
+    <string name="orderLabel">Order</string>
+    <string name="ascending">Ascending</string>
+    <string name="descending">Descending</string>
 </resources>

@@ -31,7 +31,7 @@
             app:met_baseColor="@android:color/black"
             app:met_clearButton="true"
             app:met_errorColor="#ddaa00"
-            app:met_primaryColor="@color/list_item_highlight"
+            app:met_primaryColor="@android:color/black"
             app:met_floatingLabel="normal"
             app:met_floatingLabelText="@string/dictionaryNameHinit"
             android:inputType="text" />

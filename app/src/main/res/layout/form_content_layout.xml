@@ -1,60 +1,176 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/extendedFormContainer"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:orientation="vertical"
+    android:stretchColumns="1">
 
-    <LinearLayout
-        android:id="@+id/extendedFormContainer"
+    <TableRow
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/baseFormContainer"
-        android:background="@android:color/white"
-        android:orientation="vertical">
+        android:layout_marginEnd="38dp"
+        android:layout_marginLeft="18dp"
+        android:layout_marginRight="38dp"
+        android:layout_marginStart="18dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginEnd="14dp"
+            android:layout_marginRight="14dp"
+            android:text="@string/startsWithLabel"
+            android:textAppearance="@android:style/TextAppearance.Small"
+            android:textColor="@android:color/darker_gray" />
+
 
         <andrzej.example.com.wordunscrambler.views.MaterialEditText
+            android:id="@+id/startsWithEditor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/editTextFontSize"
+            android:background="@android:drawable/editbox_background"
+            android:inputType="textNoSuggestions"
+            android:textAppearance="@android:style/TextAppearance.Medium"
             app:met_baseColor="@android:color/black"
             app:met_clearButton="true"
             app:met_errorColor="#ddaa00"
-            app:met_primaryColor="@color/list_item_highlight"
+            app:met_primaryColor="@android:color/black" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="38dp"
+        android:layout_marginLeft="18dp"
+        android:layout_marginRight="38dp"
+        android:layout_marginStart="18dp">
+
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="3dp"
-            android:hint="@string/scrambledWordHint"
-            android:inputType="textNoSuggestions"
-            android:lines="1"
-            android:maxLines="1"
-            android:singleLine="true" />
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginEnd="14dp"
+            android:layout_marginRight="14dp"
+            android:text="@string/endsWithLabel"
+            android:textAppearance="@android:style/TextAppearance.Small"
+            android:textColor="@android:color/darker_gray" />
+
 
         <andrzej.example.com.wordunscrambler.views.MaterialEditText
+            android:id="@+id/endsWithEditor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/editTextFontSize"
+            android:background="@android:drawable/editbox_background"
+            android:inputType="textNoSuggestions"
+            android:textAppearance="@android:style/TextAppearance.Medium"
             app:met_baseColor="@android:color/black"
             app:met_clearButton="true"
             app:met_errorColor="#ddaa00"
-            app:met_primaryColor="@color/list_item_highlight"
+            app:met_primaryColor="@android:color/black" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="38dp"
+        android:layout_marginLeft="18dp"
+        android:layout_marginRight="38dp"
+        android:layout_marginStart="18dp">
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="3dp"
-            android:hint="@string/scrambledWordHint"
-            android:inputType="textNoSuggestions"
-            android:lines="1"
-            android:maxLines="1"
-            android:singleLine="true" />
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginEnd="14dp"
+            android:layout_marginRight="14dp"
+            android:text="@string/containsLabel"
+            android:textAppearance="@android:style/TextAppearance.Small"
+            android:textColor="@android:color/darker_gray" />
+
 
         <andrzej.example.com.wordunscrambler.views.MaterialEditText
+            android:id="@+id/containsEditor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/editTextFontSize"
+            android:background="@android:drawable/editbox_background"
+            android:inputType="textNoSuggestions"
+            android:textAppearance="@android:style/TextAppearance.Medium"
             app:met_baseColor="@android:color/black"
             app:met_clearButton="true"
             app:met_errorColor="#ddaa00"
-            app:met_primaryColor="@color/list_item_highlight"
+            app:met_primaryColor="@android:color/black" />
+    </TableRow>
+
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="38dp"
+        android:layout_marginLeft="18dp"
+        android:layout_marginRight="38dp"
+        android:layout_marginStart="18dp">
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="3dp"
-            android:hint="@string/scrambledWordHint"
-            android:inputType="textNoSuggestions"
-            android:lines="1"
-            android:maxLines="1"
-            android:singleLine="true" />
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginEnd="14dp"
+            android:layout_marginRight="14dp"
+            android:text="@string/lengthLabel"
+            android:textAppearance="@android:style/TextAppearance.Small"
+            android:textColor="@android:color/darker_gray" />
 
-    </LinearLayout>
 
-</LinearLayout>
+        <andrzej.example.com.wordunscrambler.views.MaterialEditText
+            android:id="@+id/lengthEditor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/editTextFontSize"
+            android:background="@android:drawable/editbox_background"
+            android:inputType="numberDecimal"
+            android:textAppearance="@android:style/TextAppearance.Medium"
+            app:met_baseColor="@android:color/black"
+            app:met_clearButton="true"
+            app:met_errorColor="#ddaa00"
+            app:met_primaryColor="@android:color/black" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="38dp"
+        android:layout_marginLeft="18dp"
+        android:layout_marginRight="38dp"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="6dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginEnd="14dp"
+            android:layout_marginRight="14dp"
+            android:text="@string/orderLabel"
+            android:textAppearance="@android:style/TextAppearance.Small"
+            android:textColor="@android:color/darker_gray" />
+
+
+        <Spinner
+            android:id="@+id/spinnerSortingTypes"
+            style="@style/spinnerDropDownItemStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@android:style/TextAppearance.Medium"
+            android:entries="@array/sortingWordsItems"
+            android:layout_gravity="start" />
+    </TableRow>
+</TableLayout>
+

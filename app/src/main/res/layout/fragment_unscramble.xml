@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/formExpandableLayout"
         android:layout_centerHorizontal="true"
-        android:layout_margin="4dp"
+        android:layout_margin="16dp"
         android:text="Text test"
         android:textAppearance="@android:style/TextAppearance.Small" />
 
