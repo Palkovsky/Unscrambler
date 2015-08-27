@@ -75,4 +75,7 @@
     <string name="length_bigger_than_scrambledWord_length">Length cannot be bigger than scrambled word size</string>
     <string name="unscrambling_word">Unscrambling...</string>
     <string name="no_dictionary_mounted">You don\'t have any proper dictionary mounted</string>
+    <string name="no_words_found">No words have been found</string>
+    <string name="no_words_found_for">No words found for</string>
+    <string name="scrambled_word_longer_than_limit">Scrambled word cannot be longer than 15 characters</string>
 </resources>

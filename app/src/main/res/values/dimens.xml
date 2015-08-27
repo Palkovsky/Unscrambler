@@ -8,4 +8,5 @@
     <dimen name="error_textSize">24sp</dimen>
     <dimen name="editTextSize">16dp</dimen>
     <dimen name="editTextFontSize">13sp</dimen>
+    <dimen name="resultTextViewMargin">4dp</dimen>
 </resources>

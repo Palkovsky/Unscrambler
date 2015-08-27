@@ -11,18 +11,28 @@
         android:id="@+id/formExpandableLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        expandable:el_headerLayout="@layout/form_header_layout"
+        android:background="@android:color/white"
         expandable:el_contentLayout="@layout/form_content_layout"
         expandable:el_duration="300"
-        android:background="@android:color/white"/>
+        expandable:el_headerLayout="@layout/form_header_layout" />
+
 
     <TextView
+        android:id="@+id/noWordsFoundTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/formExpandableLayout"
         android:layout_centerHorizontal="true"
-        android:layout_margin="16dp"
-        android:text="Text test"
-        android:textAppearance="@android:style/TextAppearance.Small" />
+        android:layout_margin="10dp"
+        android:text="@string/no_words_found"
+        android:textAppearance="@android:style/TextAppearance.Small"
+        android:visibility="gone" />
+
+    <andrzej.example.com.wordunscrambler.views.AnimatedExpandableListView
+        android:id="@+id/resultsExpandableListView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/formExpandableLayout"
+        android:visibility="gone" />
 
 </RelativeLayout>

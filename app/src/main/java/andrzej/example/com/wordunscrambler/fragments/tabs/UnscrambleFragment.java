@@ -25,21 +25,25 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import andrzej.example.com.wordunscrambler.R;
+import andrzej.example.com.wordunscrambler.adapters.WordResultsAdapter;
 import andrzej.example.com.wordunscrambler.config.ResultSortingMethod;
 import andrzej.example.com.wordunscrambler.config.UnscrambleTabConfig;
 import andrzej.example.com.wordunscrambler.interfaces.UnscrambleWordsAsyncListener;
 import andrzej.example.com.wordunscrambler.models.Dictionary;
 import andrzej.example.com.wordunscrambler.utils.Converter;
 import andrzej.example.com.wordunscrambler.utils.DictionaryUtils;
+import andrzej.example.com.wordunscrambler.utils.ResultListUtils;
 import andrzej.example.com.wordunscrambler.utils.StringOpearations;
 import andrzej.example.com.wordunscrambler.utils.ViewUtils;
 import andrzej.example.com.wordunscrambler.utils.WordAlphabetComparator;
 import andrzej.example.com.wordunscrambler.utils.WordAlphabetReverseComparator;
 import andrzej.example.com.wordunscrambler.utils.WordLengthComparatorAsc;
 import andrzej.example.com.wordunscrambler.utils.WordLengthComparatorDesc;
+import andrzej.example.com.wordunscrambler.views.AnimatedExpandableListView;
 import andrzej.example.com.wordunscrambler.views.ExpandableLayout;
 import andrzej.example.com.wordunscrambler.views.MaterialEditText;
 
@@ -54,12 +58,22 @@ public class UnscrambleFragment extends Fragment implements View.OnClickListener
     ExpandableLayout expandableFormLayout;
     private ImageButton expandBtn;
     private ImageButton unscrambleBtn;
+    private AnimatedExpandableListView resultsExpandableListView;
     private MaterialEditText scrambledWordEditor;
     private MaterialEditText startsWithEditor;
     private MaterialEditText endsWithEditor;
     private MaterialEditText containsEditor;
     private MaterialEditText lengthEditor;
+    private TextView noWordsFoundTextView;
     private Spinner spinnerSortingTypes;
+
+    //Lists
+    private List<String> resultWords = new ArrayList<>();
+    List<String> headers = new ArrayList<>();
+    HashMap<String, List<String>> childItems  = new HashMap<>();
+
+    //Adapter
+    WordResultsAdapter mAdapter;
 
     public UnscrambleFragment() {
         // Required empty public constructor
@@ -81,11 +95,13 @@ public class UnscrambleFragment extends Fragment implements View.OnClickListener
         expandableFormLayout = (ExpandableLayout) v.findViewById(R.id.formExpandableLayout);
         expandBtn = (ImageButton) v.findViewById(R.id.expandFormBtn);
         unscrambleBtn = (ImageButton) v.findViewById(R.id.unscrambleWordBtn);
+        resultsExpandableListView = (AnimatedExpandableListView) v.findViewById(R.id.resultsExpandableListView);
         scrambledWordEditor = (MaterialEditText) v.findViewById(R.id.scrambledWordEditor);
         startsWithEditor = (MaterialEditText) v.findViewById(R.id.startsWithEditor);
         endsWithEditor = (MaterialEditText) v.findViewById(R.id.endsWithEditor);
         containsEditor = (MaterialEditText) v.findViewById(R.id.containsEditor);
         lengthEditor = (MaterialEditText) v.findViewById(R.id.lengthEditor);
+        noWordsFoundTextView = (TextView) v.findViewById(R.id.noWordsFoundTextView);
         spinnerSortingTypes = (Spinner) v.findViewById(R.id.spinnerSortingTypes);
 
         //Listeners
@@ -185,6 +201,8 @@ public class UnscrambleFragment extends Fragment implements View.OnClickListener
         });
         //END OF BUNCZ OF SZIT
 
+        //Adapter setup
+
         //View setup
 
         return v;
@@ -219,7 +237,7 @@ public class UnscrambleFragment extends Fragment implements View.OnClickListener
      */
 
     private void unscramble() {
-        String scrambledWord = scrambledWordEditor.getText().toString().trim();
+        final String scrambledWord = scrambledWordEditor.getText().toString().trim();
         String startsWith = startsWithEditor.getText().toString().trim();
         String endsWith = endsWithEditor.getText().toString().trim();
         String contains = containsEditor.getText().toString().trim();
@@ -241,13 +259,22 @@ public class UnscrambleFragment extends Fragment implements View.OnClickListener
                     public void onUnscrambled(List<String> unscrambledWords) {
                         hideKeyboard();
 
-                        for (String word : unscrambledWords) {
-                            Log.e(null, "Word: " + word);
+                        resultWords = unscrambledWords;
+
+                        if (resultWords.size() > 0) {
+                            headers = ResultListUtils.generateHeaders(resultWords, sortingMethod);
+                            childItems  = ResultListUtils.generateChildrenHashMap(headers, unscrambledWords, sortingMethod);
+
+                            mAdapter = new WordResultsAdapter(getActivity(), headers, childItems);
+                            resultsExpandableListView.setAdapter(mAdapter);
+
+                            noWordsFoundTextView.setVisibility(View.GONE);
+                            resultsExpandableListView.setVisibility(View.VISIBLE);
+                        } else {
+                            noWordsFoundTextView.setVisibility(View.VISIBLE);
+                            resultsExpandableListView.setVisibility(View.GONE);
+                            noWordsFoundTextView.setText(getString(R.string.no_words_found_for) + " '" + scrambledWord + "'");
                         }
-
-                        Log.e(null, "Count: " + unscrambledWords.size());
-
-                        Toast.makeText(getActivity(), "Unscrambled", Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -269,6 +296,9 @@ public class UnscrambleFragment extends Fragment implements View.OnClickListener
 
         if (scrambledWord.length() == 0) {
             Toast.makeText(getActivity(), R.string.enter_scrambled_word, Toast.LENGTH_SHORT).show();
+            return false;
+        }else if (scrambledWord.length() > 15) {
+            Toast.makeText(getActivity(), R.string.scrambled_word_longer_than_limit, Toast.LENGTH_SHORT).show();
             return false;
         } else if (startsWith.length() > scrambledWord.length()) {
             Toast.makeText(getActivity(), R.string.starts_with_longer_than_scrambledWord, Toast.LENGTH_SHORT).show();

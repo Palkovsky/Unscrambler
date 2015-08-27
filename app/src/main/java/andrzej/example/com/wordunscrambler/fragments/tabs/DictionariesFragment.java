@@ -386,49 +386,6 @@ public class DictionariesFragment extends Fragment implements ItemActionsListene
                 popupMenu.inflate(R.menu.sort_popup);
                 popupMenu.show();
 
-
-                /*
-                final int finalCurrentSorting = sortingMethod;
-
-                new MaterialDialog.Builder(getActivity())
-                        .title(R.string.sorting)
-                        .items(R.array.sortingDialogItems)
-                        .itemsCallbackSingleChoice(sortingMethod, new MaterialDialog.ListCallbackSingleChoice() {
-                            @Override
-                            public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                                switch (which) {
-                                    case 0:
-                                        sortingMethod = SortingMethods.NO_SORTING;
-                                        break;
-
-                                    case 1:
-                                        sortingMethod = SortingMethods.SORTING_BY_NAME;
-                                        break;
-
-                                    case 2:
-                                        sortingMethod = SortingMethods.SORTING_BY_NAME_DESC;
-                                        break;
-
-                                    case 3:
-                                        sortingMethod = SortingMethods.SORTING_BY_WORDS_COUNT;
-                                        break;
-
-                                    case 4:
-                                        sortingMethod = SortingMethods.SORTING_BY_WORDS_COUNT_DESC;
-                                        break;
-                                }
-
-                                if (finalCurrentSorting != sortingMethod) {
-                                    update();
-                                    dictionariesListView.setSelection(0);
-                                }
-                                return true;
-                            }
-                        })
-                        .positiveText(R.string.choose)
-                        .show();
-
-                        */
                 break;
         }
     }
