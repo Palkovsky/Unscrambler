@@ -19,6 +19,7 @@
         android:lines="1"
         android:maxLines="1"
         android:singleLine="true"
+        android:imeOptions="actionSearch"
         app:met_baseColor="@android:color/black"
         app:met_clearButton="true"
         app:met_errorColor="#ddaa00"

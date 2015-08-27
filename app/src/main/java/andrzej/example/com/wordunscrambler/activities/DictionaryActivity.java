@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -128,6 +129,7 @@ public class DictionaryActivity extends AppCompatActivity implements TextWatcher
             case R.id.menu_deleteDictionary:
 
                 DictionariesFragment.paused = false;
+                TabsConfig.CURRENT_TAB_NUM = 1;
 
                 new MaterialDialog.Builder(this)
                         .title(R.string.delete)
@@ -278,6 +280,12 @@ public class DictionaryActivity extends AppCompatActivity implements TextWatcher
         return super.onOptionsItemSelected(item);
     }
 
+    private void hideKeyboard(){
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(dictionaryNameEditor.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(dictionaryContentEditor.getWindowToken(), 0);
+    }
+
     private String ensureName(String name) {
 
         if (!stringEndsWithItemFromList(name, PathObject.WHITELISTED_EXTENSIONS))
@@ -307,7 +315,7 @@ public class DictionaryActivity extends AppCompatActivity implements TextWatcher
     @Override
     protected void onPause() {
         super.onPause();
-        TabsConfig.CURRENT_TAB_NUM = 1;
+        hideKeyboard();
     }
 
     @Override

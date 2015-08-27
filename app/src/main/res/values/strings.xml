@@ -64,4 +64,15 @@
     <string name="orderLabel">Order</string>
     <string name="ascending">Ascending</string>
     <string name="descending">Descending</string>
+    <string name="enter_scrambled_word">Enter scrambled word</string>
+    <string name="starts_with_longer_than_scrambledWord">\'Starts with\' cannot be longer than scrambled word</string>
+    <string name="starts_with_contains_chars_which_not_in_scrambledWord">\'Starts with\' must contain characters from the scrambled word</string>
+    <string name="ends_with_longer_than_scrambledWord">\'Ends with\' cannot be longer than scrambled word</string>
+    <string name="ends_with_contains_chars_which_not_in_scrambledWord">\'Ends with\' must contain characters from the scrambled word</string>
+    <string name="contains_longer_than_scrambledWord">\'Contains\' cannot be longer than scrambled word</string>
+    <string name="contains_contains_chars_which_not_in_scrambledWord">\'Contains\' must contain characters from the scrambled word</string>
+    <string name="length_cannot_be_zero">Length cannot be equal to zero</string>
+    <string name="length_bigger_than_scrambledWord_length">Length cannot be bigger than scrambled word size</string>
+    <string name="unscrambling_word">Unscrambling...</string>
+    <string name="no_dictionary_mounted">You don\'t have any proper dictionary mounted</string>
 </resources>

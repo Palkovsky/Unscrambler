@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         expandable:el_headerLayout="@layout/form_header_layout"
         expandable:el_contentLayout="@layout/form_content_layout"
+        expandable:el_duration="300"
         android:background="@android:color/white"/>
 
     <TextView

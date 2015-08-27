@@ -166,6 +166,8 @@ public class BrowseFragment extends BackHandledFragment implements View.OnClickL
             path.goUp();
             update();
         } else {
+            getActivity().getSupportFragmentManager().popBackStack();
+
             getActivity().getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragmentContainer, new TabsFragment(), TabsFragment.TAG)
