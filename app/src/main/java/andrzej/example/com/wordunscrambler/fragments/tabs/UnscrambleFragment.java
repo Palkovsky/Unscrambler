@@ -268,9 +268,15 @@ public class UnscrambleFragment extends Fragment implements View.OnClickListener
                             mAdapter = new WordResultsAdapter(getActivity(), headers, childItems);
                             resultsExpandableListView.setAdapter(mAdapter);
 
+                            UnscrambleTabConfig.headers = headers;
+                            UnscrambleTabConfig.childItems = childItems;
+                            UnscrambleTabConfig.noMatchingWords = false;
+
                             noWordsFoundTextView.setVisibility(View.GONE);
                             resultsExpandableListView.setVisibility(View.VISIBLE);
                         } else {
+                            UnscrambleTabConfig.noMatchingWords = true;
+                            UnscrambleTabConfig.noMatchingFor = scrambledWord;
                             noWordsFoundTextView.setVisibility(View.VISIBLE);
                             resultsExpandableListView.setVisibility(View.GONE);
                             noWordsFoundTextView.setText(getString(R.string.no_words_found_for) + " '" + scrambledWord + "'");
@@ -385,6 +391,18 @@ public class UnscrambleFragment extends Fragment implements View.OnClickListener
         endsWithEditor.setText(UnscrambleTabConfig.endsWithInputted);
         containsEditor.setText(UnscrambleTabConfig.containsInputted);
         lengthEditor.setText(UnscrambleTabConfig.lengthInputted);
+
+        if(UnscrambleTabConfig.headers != null && UnscrambleTabConfig.headers.size()>0){
+            mAdapter = new WordResultsAdapter(getActivity(), UnscrambleTabConfig.headers, UnscrambleTabConfig.childItems);
+            resultsExpandableListView.setAdapter(mAdapter);
+
+            noWordsFoundTextView.setVisibility(View.GONE);
+            resultsExpandableListView.setVisibility(View.VISIBLE);
+        }else if(UnscrambleTabConfig.noMatchingWords){
+            noWordsFoundTextView.setVisibility(View.VISIBLE);
+            resultsExpandableListView.setVisibility(View.GONE);
+            noWordsFoundTextView.setText(getString(R.string.no_words_found_for) + " '" + UnscrambleTabConfig.noMatchingFor + "'");
+        }
 
         hideKeyboard();
     }
