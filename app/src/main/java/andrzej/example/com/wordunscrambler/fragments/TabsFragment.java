@@ -1,5 +1,6 @@
 package andrzej.example.com.wordunscrambler.fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 
 import andrzej.example.com.wordunscrambler.R;
 import andrzej.example.com.wordunscrambler.activities.DictionaryActivity;
@@ -107,6 +109,11 @@ public class TabsFragment extends BackHandledFragment implements ViewPager.OnPag
     public void onPageSelected(int position) {
         TabsConfig.CURRENT_TAB_NUM = position;
 
+        InputMethodManager imm = (InputMethodManager)
+                getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (getActivity().getCurrentFocus() != null)
+            imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+
         switch (position) {
             //Unscramble fragment
             case 0:
@@ -147,6 +154,10 @@ public class TabsFragment extends BackHandledFragment implements ViewPager.OnPag
                         .beginTransaction()
                         .replace(R.id.fragmentContainer, new BrowseFragment(), BrowseFragment.TAG)
                         .commit();
+                InputMethodManager imm = (InputMethodManager)
+                        getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (getActivity().getCurrentFocus() != null)
+                    imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
                 break;
         }
 

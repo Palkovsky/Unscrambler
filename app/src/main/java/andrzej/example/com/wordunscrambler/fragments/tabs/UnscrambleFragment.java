@@ -65,12 +65,14 @@ public class UnscrambleFragment extends Fragment implements View.OnClickListener
     private MaterialEditText containsEditor;
     private MaterialEditText lengthEditor;
     private TextView noWordsFoundTextView;
+    private TextView unscramblingHintTextView;
+    private TextView headerResultsCountTextView;
     private Spinner spinnerSortingTypes;
 
     //Lists
     private List<String> resultWords = new ArrayList<>();
     List<String> headers = new ArrayList<>();
-    HashMap<String, List<String>> childItems  = new HashMap<>();
+    HashMap<String, List<String>> childItems = new HashMap<>();
 
     //Adapter
     WordResultsAdapter mAdapter;
@@ -103,6 +105,11 @@ public class UnscrambleFragment extends Fragment implements View.OnClickListener
         lengthEditor = (MaterialEditText) v.findViewById(R.id.lengthEditor);
         noWordsFoundTextView = (TextView) v.findViewById(R.id.noWordsFoundTextView);
         spinnerSortingTypes = (Spinner) v.findViewById(R.id.spinnerSortingTypes);
+        unscramblingHintTextView = (TextView) v.findViewById(R.id.unscramblingHintTextView);
+
+        View listViewHeader = inflater.inflate(R.layout.result_list_header, resultsExpandableListView, false);
+        headerResultsCountTextView = (TextView) listViewHeader.findViewById(R.id.headerFoundCountTextView);
+        resultsExpandableListView.addHeaderView(listViewHeader, null, false);
 
         //Listeners
         expandBtn.setOnClickListener(this);
@@ -205,6 +212,7 @@ public class UnscrambleFragment extends Fragment implements View.OnClickListener
 
         //View setup
 
+
         return v;
     }
 
@@ -261,9 +269,15 @@ public class UnscrambleFragment extends Fragment implements View.OnClickListener
 
                         resultWords = unscrambledWords;
 
+                        unscramblingHintTextView.setVisibility(View.GONE);
+
                         if (resultWords.size() > 0) {
+
+                            headerResultsCountTextView.setText(getString(R.string.found_colon) + " " + resultWords.size());
+                            UnscrambleTabConfig.foundWordsCount = resultWords.size();
+
                             headers = ResultListUtils.generateHeaders(resultWords, sortingMethod);
-                            childItems  = ResultListUtils.generateChildrenHashMap(headers, unscrambledWords, sortingMethod);
+                            childItems = ResultListUtils.generateChildrenHashMap(headers, unscrambledWords, sortingMethod);
 
                             mAdapter = new WordResultsAdapter(getActivity(), headers, childItems);
                             resultsExpandableListView.setAdapter(mAdapter);
@@ -275,6 +289,7 @@ public class UnscrambleFragment extends Fragment implements View.OnClickListener
                             noWordsFoundTextView.setVisibility(View.GONE);
                             resultsExpandableListView.setVisibility(View.VISIBLE);
                         } else {
+                            UnscrambleTabConfig.foundWordsCount = 0;
                             UnscrambleTabConfig.noMatchingWords = true;
                             UnscrambleTabConfig.noMatchingFor = scrambledWord;
                             noWordsFoundTextView.setVisibility(View.VISIBLE);
@@ -303,7 +318,7 @@ public class UnscrambleFragment extends Fragment implements View.OnClickListener
         if (scrambledWord.length() == 0) {
             Toast.makeText(getActivity(), R.string.enter_scrambled_word, Toast.LENGTH_SHORT).show();
             return false;
-        }else if (scrambledWord.length() > 15) {
+        } else if (scrambledWord.length() > 15) {
             Toast.makeText(getActivity(), R.string.scrambled_word_longer_than_limit, Toast.LENGTH_SHORT).show();
             return false;
         } else if (startsWith.length() > scrambledWord.length()) {
@@ -392,13 +407,15 @@ public class UnscrambleFragment extends Fragment implements View.OnClickListener
         containsEditor.setText(UnscrambleTabConfig.containsInputted);
         lengthEditor.setText(UnscrambleTabConfig.lengthInputted);
 
-        if(UnscrambleTabConfig.headers != null && UnscrambleTabConfig.headers.size()>0){
+        if (UnscrambleTabConfig.headers != null && UnscrambleTabConfig.headers.size() > 0) {
             mAdapter = new WordResultsAdapter(getActivity(), UnscrambleTabConfig.headers, UnscrambleTabConfig.childItems);
             resultsExpandableListView.setAdapter(mAdapter);
 
+            headerResultsCountTextView.setText(getString(R.string.found_colon) + " " + UnscrambleTabConfig.foundWordsCount);
+
             noWordsFoundTextView.setVisibility(View.GONE);
             resultsExpandableListView.setVisibility(View.VISIBLE);
-        }else if(UnscrambleTabConfig.noMatchingWords){
+        } else if (UnscrambleTabConfig.noMatchingWords) {
             noWordsFoundTextView.setVisibility(View.VISIBLE);
             resultsExpandableListView.setVisibility(View.GONE);
             noWordsFoundTextView.setText(getString(R.string.no_words_found_for) + " '" + UnscrambleTabConfig.noMatchingFor + "'");

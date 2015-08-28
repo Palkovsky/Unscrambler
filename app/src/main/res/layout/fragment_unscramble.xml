@@ -18,6 +18,16 @@
 
 
     <TextView
+        android:id="@+id/unscramblingHintTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/formExpandableLayout"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="10dp"
+        android:text="@string/unscramblingHint"
+        android:textAppearance="@android:style/TextAppearance.Small" />
+
+    <TextView
         android:id="@+id/noWordsFoundTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
