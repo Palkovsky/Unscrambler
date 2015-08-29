@@ -12,9 +12,9 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name=".activities.MainActivity"
-            android:windowSoftInputMode="stateVisible|adjustPan"
             android:label="@string/app_name"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -23,11 +23,11 @@
         </activity>
         <activity
             android:name=".activities.DictionaryActivity"
-            android:label="@string/title_activity_dictionary"
-            android:parentActivityName=".activities.MainActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="andrzej.example.com.wordunscrambler.activities.MainActivity" />
+            android:label="@string/title_activity_dictionary">
+        </activity>
+        <activity
+            android:name=".activities.DownloadActivity"
+            android:label="@string/title_activity_download" >
         </activity>
     </application>
 

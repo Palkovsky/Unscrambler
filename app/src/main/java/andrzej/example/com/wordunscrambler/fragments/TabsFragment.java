@@ -17,6 +17,7 @@ import android.view.inputmethod.InputMethodManager;
 
 import andrzej.example.com.wordunscrambler.R;
 import andrzej.example.com.wordunscrambler.activities.DictionaryActivity;
+import andrzej.example.com.wordunscrambler.activities.DownloadActivity;
 import andrzej.example.com.wordunscrambler.activities.MainActivity;
 import andrzej.example.com.wordunscrambler.adapters.TabsAdapter;
 import andrzej.example.com.wordunscrambler.config.TabsConfig;
@@ -109,6 +110,7 @@ public class TabsFragment extends BackHandledFragment implements ViewPager.OnPag
     public void onPageSelected(int position) {
         TabsConfig.CURRENT_TAB_NUM = position;
 
+
         InputMethodManager imm = (InputMethodManager)
                 getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         if (getActivity().getCurrentFocus() != null)
@@ -149,6 +151,11 @@ public class TabsFragment extends BackHandledFragment implements ViewPager.OnPag
                 startActivity(dictionaryIntent);
                 break;
 
+            case R.id.menu_downloadDictionaries:
+                Intent downloadActivityIntent = new Intent(getActivity(), DownloadActivity.class);
+                startActivity(downloadActivityIntent);
+                break;
+
             case R.id.menu_browseDicts:
                 getActivity().getSupportFragmentManager()
                         .beginTransaction()
@@ -159,6 +166,8 @@ public class TabsFragment extends BackHandledFragment implements ViewPager.OnPag
                 if (getActivity().getCurrentFocus() != null)
                     imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
                 break;
+
+
         }
 
         return super.onOptionsItemSelected(item);

@@ -14,4 +14,10 @@
         android:titleCondensed="@string/menu_browseDicts"
         hmkcode:showAsAction="never"/>
 
+    <item
+        android:id="@+id/menu_downloadDictionaries"
+        android:title="@string/menu_downloadDictionaries"
+        android:titleCondensed="@string/menu_downloadDictionaries"
+        hmkcode:showAsAction="never"/>
+
 </menu>

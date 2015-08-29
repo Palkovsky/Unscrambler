@@ -15,6 +15,7 @@ public class UnscrambleTabConfig {
     public static String endsWithInputted = "";
     public static String containsInputted = "";
     public static String lengthInputted = "";
+    public static String currentDictionaryName = "";
     public static int orderingPosition = 0;
     public static int foundWordsCount = 0;
     public static String noMatchingFor = "";

@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -70,6 +72,7 @@ public class DictionaryActivity extends AppCompatActivity implements TextWatcher
         dictionaryNameEditor = (MaterialEditText) findViewById(R.id.dictionaryNameEditor);
         dictionaryContentEditor = (RichEditText) findViewById(R.id.dictionaryContentEditor);
 
+
         //Init
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -85,7 +88,7 @@ public class DictionaryActivity extends AppCompatActivity implements TextWatcher
         dictionaryNameEditor.setText(dictionary.getName());
 
         if (dictionary.getFile() != null)
-            dictionaryContentEditor.setText(Converter.getTextFileContents(dictionary.getFile()));
+            dictionaryContentEditor.setText(Converter.getTextFileContents(dictionary.getFile()), TextView.BufferType.EDITABLE);
         else
             dictionaryNameEditor.requestFocus();
 
@@ -175,11 +178,11 @@ public class DictionaryActivity extends AppCompatActivity implements TextWatcher
 
                     if (dictionaryNameEditor.getText().toString().equals(""))
                         Toast.makeText(getApplicationContext(), R.string.empty_name, Toast.LENGTH_SHORT).show();
-                    else if(stringContainsItemFromList(dictionaryNameEditor.getText().toString(), disallowedChars))
+                    else if (stringContainsItemFromList(dictionaryNameEditor.getText().toString(), disallowedChars))
                         Toast.makeText(getApplicationContext(), R.string.name_contains_disallowed_char, Toast.LENGTH_SHORT).show();
                     else if (nameString.startsWith(".") || nameString.startsWith("/") || nameString.toString().startsWith("\\") || nameString.toString().startsWith("~"))
                         Toast.makeText(getApplicationContext(), R.string.name_starts_with_wrong_name, Toast.LENGTH_SHORT).show();
-                    else if(nameString.trim().length()>MAX_NAME_LEN)
+                    else if (nameString.trim().length() > MAX_NAME_LEN)
                         Toast.makeText(getApplicationContext(), R.string.name_too_long, Toast.LENGTH_SHORT).show();
                     else if (freeToEdit) {
                         File newFile = new File(name);
@@ -227,11 +230,11 @@ public class DictionaryActivity extends AppCompatActivity implements TextWatcher
 
                         if (dictionaryNameEditor.getText().toString().equals(""))
                             Toast.makeText(getApplicationContext(), R.string.empty_name, Toast.LENGTH_SHORT).show();
-                        else if(stringContainsItemFromList(dictionaryNameEditor.getText().toString(), disallowedChars))
+                        else if (stringContainsItemFromList(dictionaryNameEditor.getText().toString(), disallowedChars))
                             Toast.makeText(getApplicationContext(), R.string.name_contains_disallowed_char, Toast.LENGTH_SHORT).show();
                         else if (nameString.startsWith(".") || nameString.startsWith("/") || nameString.toString().startsWith("\\") || nameString.toString().startsWith("~"))
                             Toast.makeText(getApplicationContext(), R.string.name_starts_with_wrong_name, Toast.LENGTH_SHORT).show();
-                        else if(nameString.trim().length()>MAX_NAME_LEN)
+                        else if (nameString.trim().length() > MAX_NAME_LEN)
                             Toast.makeText(getApplicationContext(), R.string.name_too_long, Toast.LENGTH_SHORT).show();
 
                         else if (freeToEdit) {
@@ -273,14 +276,14 @@ public class DictionaryActivity extends AppCompatActivity implements TextWatcher
                 break;
 
             case android.R.id.home:
-                finish();
+                this.onBackPressed();
                 break;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    private void hideKeyboard(){
+    private void hideKeyboard() {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(dictionaryNameEditor.getWindowToken(), 0);
         imm.hideSoftInputFromWindow(dictionaryContentEditor.getWindowToken(), 0);
@@ -316,6 +319,7 @@ public class DictionaryActivity extends AppCompatActivity implements TextWatcher
     protected void onPause() {
         super.onPause();
         hideKeyboard();
+        overridePendingTransition(R.anim.dummy_animation_back, R.anim.right_to_left_animation);
     }
 
     @Override
@@ -324,8 +328,13 @@ public class DictionaryActivity extends AppCompatActivity implements TextWatcher
     }
 
     @Override
-    public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+    }
 
     @Override
-    public void afterTextChanged(Editable s) {}
+    public void afterTextChanged(Editable s) {
+    }
+
+
+
 }

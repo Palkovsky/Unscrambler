@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -34,11 +33,9 @@ import andrzej.example.com.wordunscrambler.config.ResultSortingMethod;
 import andrzej.example.com.wordunscrambler.config.UnscrambleTabConfig;
 import andrzej.example.com.wordunscrambler.interfaces.UnscrambleWordsAsyncListener;
 import andrzej.example.com.wordunscrambler.models.Dictionary;
-import andrzej.example.com.wordunscrambler.utils.Converter;
 import andrzej.example.com.wordunscrambler.utils.DictionaryUtils;
 import andrzej.example.com.wordunscrambler.utils.ResultListUtils;
 import andrzej.example.com.wordunscrambler.utils.StringOpearations;
-import andrzej.example.com.wordunscrambler.utils.ViewUtils;
 import andrzej.example.com.wordunscrambler.utils.WordAlphabetComparator;
 import andrzej.example.com.wordunscrambler.utils.WordAlphabetReverseComparator;
 import andrzej.example.com.wordunscrambler.utils.WordLengthComparatorAsc;
@@ -84,7 +81,6 @@ public class UnscrambleFragment extends Fragment implements View.OnClickListener
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -132,14 +128,7 @@ public class UnscrambleFragment extends Fragment implements View.OnClickListener
         });
         scrambledWordEditor.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    unscramble();
-                    return true;
-                }
-                return false;
-            }
-        });
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {if (actionId == EditorInfo.IME_ACTION_SEARCH) {unscramble();return true;}return false;}});
         startsWithEditor.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -258,8 +247,9 @@ public class UnscrambleFragment extends Fragment implements View.OnClickListener
         if (isInputProper(scrambledWord, startsWith, endsWith, contains, length)) {
 
             //Load dictionary
-            Dictionary dictionary = DictionaryUtils.getCurrentDictionary(getActivity());
+            final Dictionary dictionary = DictionaryUtils.getCurrentDictionary(getActivity());
             if (isProperDicitonary(dictionary)) {
+                UnscrambleTabConfig.currentDictionaryName = dictionary.getName();
                 UnscrambleWordAsync unscrambleWordAsync = new UnscrambleWordAsync(scrambledWord, dictionary.getContentChunks());
 
                 unscrambleWordAsync.registerResultListener(new UnscrambleWordsAsyncListener() {
@@ -289,12 +279,16 @@ public class UnscrambleFragment extends Fragment implements View.OnClickListener
                             noWordsFoundTextView.setVisibility(View.GONE);
                             resultsExpandableListView.setVisibility(View.VISIBLE);
                         } else {
+                            UnscrambleTabConfig.headers = null;
+                            UnscrambleTabConfig.childItems = null;
                             UnscrambleTabConfig.foundWordsCount = 0;
                             UnscrambleTabConfig.noMatchingWords = true;
                             UnscrambleTabConfig.noMatchingFor = scrambledWord;
                             noWordsFoundTextView.setVisibility(View.VISIBLE);
                             resultsExpandableListView.setVisibility(View.GONE);
-                            noWordsFoundTextView.setText(getString(R.string.no_words_found_for) + " '" + scrambledWord + "'");
+                            noWordsFoundTextView.setText(getString(R.string.no_words_found_for) + " '" +
+                                    UnscrambleTabConfig.noMatchingFor + "' \n" + getString(R.string.in)
+                                    + " '" + dictionary.getName() + "'");
                         }
                     }
                 });
@@ -417,11 +411,13 @@ public class UnscrambleFragment extends Fragment implements View.OnClickListener
             resultsExpandableListView.setVisibility(View.VISIBLE);
         } else if (UnscrambleTabConfig.noMatchingWords) {
             noWordsFoundTextView.setVisibility(View.VISIBLE);
+            unscramblingHintTextView.setVisibility(View.GONE);
             resultsExpandableListView.setVisibility(View.GONE);
-            noWordsFoundTextView.setText(getString(R.string.no_words_found_for) + " '" + UnscrambleTabConfig.noMatchingFor + "'");
+            noWordsFoundTextView.setText(getString(R.string.no_words_found_for) + " '" +
+                    UnscrambleTabConfig.noMatchingFor + "' \n" + getString(R.string.in)
+                    + " '" + UnscrambleTabConfig.currentDictionaryName + "'");
         }
 
-        hideKeyboard();
     }
 
     /**

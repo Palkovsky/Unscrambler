@@ -7,7 +7,7 @@
     android:orientation="horizontal">
 
     <TextView
-        android:textColor="@android:color/white"
+        android:textColor="@color/group_text_color_selector"
         android:layout_margin="@dimen/resultTextViewMargin"
         android:id="@+id/groupTitle"
         android:layout_width="wrap_content"

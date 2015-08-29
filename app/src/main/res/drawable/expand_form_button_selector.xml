@@ -5,5 +5,8 @@
         android:state_pressed = "true"
         android:drawable="@drawable/ic_fullscreen_black_36dp_highlited"/>
     <item
+        android:state_focused="true"
+        android:drawable="@drawable/ic_fullscreen_black_36dp_highlited"/>
+    <item
         android:drawable="@drawable/ic_fullscreen_black_36dp"/>
 </selector>

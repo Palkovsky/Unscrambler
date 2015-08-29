@@ -82,9 +82,9 @@ public class WordResultsAdapter extends AnimatedExpandableListView.AnimatedExpan
         titleTv.setText(title);
 
         if (isExpanded)
-            titleTv.setTextColor(getContext().getResources().getColor(R.color.ColorPrimaryDark));
+            titleTv.setTextColor(getContext().getResources().getColorStateList(R.color.group_text_color_selector_highlited));
         else
-            titleTv.setTextColor(getContext().getResources().getColor(android.R.color.white));
+            titleTv.setTextColor(getContext().getResources().getColorStateList(R.color.group_text_color_selector));
 
         return convertView;
     }

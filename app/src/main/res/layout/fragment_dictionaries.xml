@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     tools:context="andrzej.example.com.wordunscrambler.fragments.tabs.DictionariesFragment">
 
     <include layout="@layout/no_dictionaries" />
@@ -176,9 +178,9 @@
 
 
         <RelativeLayout
-            android:layout_below="@+id/navigationBarContainerListViewDivider"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_below="@+id/navigationBarContainerListViewDivider">
 
             <com.nirhart.parallaxscroll.views.ParallaxListView
                 android:id="@+id/dictionaryListView"

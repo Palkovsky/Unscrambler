@@ -80,4 +80,7 @@
     <string name="scrambled_word_longer_than_limit">Scrambled word cannot be longer than 15 characters</string>
     <string name="found_colon">Found:</string>
     <string name="unscramblingHint">Unscramble up to 15 letter words</string>
+    <string name="in">in</string>
+    <string name="menu_downloadDictionaries">Download dictionaries</string>
+    <string name="title_activity_download">DownloadActivity</string>
 </resources>
