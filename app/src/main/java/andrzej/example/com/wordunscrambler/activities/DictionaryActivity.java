@@ -110,7 +110,10 @@ public class DictionaryActivity extends AppCompatActivity implements TextWatcher
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_dictionary, menu);
+        if (dictionary.getFile() == null)
+            getMenuInflater().inflate(R.menu.menu_dictionary_new, menu);
+        else
+            getMenuInflater().inflate(R.menu.menu_dictionary, menu);
 
         return true;
     }
@@ -155,7 +158,6 @@ public class DictionaryActivity extends AppCompatActivity implements TextWatcher
 
             case R.id.menu_saveDictionary:
                 //Save logic
-                TabsConfig.CURRENT_TAB_NUM = 1;
                 DictionariesFragment.paused = false;
 
                 String nameString = dictionaryNameEditor.getText().toString();
@@ -203,7 +205,9 @@ public class DictionaryActivity extends AppCompatActivity implements TextWatcher
 
                         dictionary.setFile(directory);
 
-                        this.onBackPressed();
+                        TabsConfig.CURRENT_TAB_NUM = 1;
+                        finish();
+                        overridePendingTransition(R.anim.dummy_animation_back, R.anim.right_to_left_animation);
                     } else
                         Toast.makeText(getApplicationContext(), R.string.file_already_exsists, Toast.LENGTH_SHORT).show();
 
@@ -265,6 +269,7 @@ public class DictionaryActivity extends AppCompatActivity implements TextWatcher
                             if (updatePrefs)
                                 DictionaryUtils.setDictionaryPreference(getApplicationContext(), dictionary);
 
+                            TabsConfig.CURRENT_TAB_NUM = 1;
                             finish();
                             overridePendingTransition(R.anim.dummy_animation_back, R.anim.right_to_left_animation);
                         } else

@@ -9,6 +9,7 @@ import java.util.List;
  */
 public class UnscrambleTabConfig {
     //Bunch of vars that help to keep views in same state
+    public static boolean applyChanges = false;
     public static boolean formExpanded = false;
     public static String scrambledWordInputted = "";
     public static String startsWithInputted = "";
@@ -18,8 +19,10 @@ public class UnscrambleTabConfig {
     public static String currentDictionaryName = "";
     public static int orderingPosition = 0;
     public static int foundWordsCount = 0;
+    public static int firstVisibleItem = 0;
     public static String noMatchingFor = "";
     public static boolean noMatchingWords = false;
     public static List<String> headers = new ArrayList<>();
+    public static List<Integer> expandedResultGroupItems = new ArrayList<>();
     public static HashMap<String, List<String>> childItems  = new HashMap<>();
 }

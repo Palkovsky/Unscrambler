@@ -15,7 +15,9 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.ExpandableListView;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -74,6 +76,7 @@ public class UnscrambleFragment extends Fragment implements View.OnClickListener
 
     //Adapter
     WordResultsAdapter mAdapter;
+
 
     public UnscrambleFragment() {
         // Required empty public constructor
@@ -203,6 +206,42 @@ public class UnscrambleFragment extends Fragment implements View.OnClickListener
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
+        resultsExpandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+            @Override
+            public void onGroupExpand(int groupPosition) {
+                if (!UnscrambleTabConfig.expandedResultGroupItems.contains(groupPosition))
+                    UnscrambleTabConfig.expandedResultGroupItems.add(groupPosition);
+            }
+        });
+        resultsExpandableListView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
+            @Override
+            public void onGroupCollapse(int groupPosition) {
+                if (UnscrambleTabConfig.expandedResultGroupItems.contains(groupPosition))
+                    UnscrambleTabConfig.expandedResultGroupItems.remove(Integer.valueOf(groupPosition));
+            }
+        });
+        resultsExpandableListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                if (visibleItemCount > 0)
+                    UnscrambleTabConfig.firstVisibleItem = firstVisibleItem;
+            }
+        });
+        resultsExpandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+            @Override
+            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+                if (resultsExpandableListView.isGroupExpanded(groupPosition))
+                    resultsExpandableListView.collapseGroupWithAnimation(groupPosition);
+                else
+                    resultsExpandableListView.expandGroupWithAnimation(groupPosition);
+                return true;
+            }
+        });
         //END OF BUNCZ OF SZIT
 
         //Adapter setup
@@ -283,12 +322,13 @@ public class UnscrambleFragment extends Fragment implements View.OnClickListener
                             UnscrambleTabConfig.headers = headers;
                             UnscrambleTabConfig.childItems = childItems;
                             UnscrambleTabConfig.noMatchingWords = false;
-
+                            UnscrambleTabConfig.expandedResultGroupItems.clear();
 
                             //Scroll to the bottom and show the longest word that have been found
-                            if(sortingMethod == ResultSortingMethod.ASCENDING || sortingMethod == ResultSortingMethod.DESCENDING) {
+                            if (sortingMethod == ResultSortingMethod.ASCENDING || sortingMethod == ResultSortingMethod.DESCENDING) {
                                 resultsExpandableListView.setSelection(headers.size() - 1);
                                 resultsExpandableListView.expandGroup(headers.size() - 1);
+                                UnscrambleTabConfig.expandedResultGroupItems.add(headers.size() - 1);
                             }
 
                             noWordsFoundTextView.setVisibility(View.GONE);
@@ -400,37 +440,53 @@ public class UnscrambleFragment extends Fragment implements View.OnClickListener
     public void onResume() {
         super.onResume();
 
-        if (UnscrambleTabConfig.formExpanded) {
-            if (!expandableFormLayout.isOpened())
-                expandableFormLayout.show();
-        } else {
-            if (expandableFormLayout.isOpened())
-                expandableFormLayout.hide();
-        }
-        expandableFormLayout.clearAnimation();
+        if (UnscrambleTabConfig.applyChanges) {
 
-        spinnerSortingTypes.setSelection(UnscrambleTabConfig.orderingPosition);
-        scrambledWordEditor.setText(UnscrambleTabConfig.scrambledWordInputted);
-        startsWithEditor.setText(UnscrambleTabConfig.startsWithInputted);
-        endsWithEditor.setText(UnscrambleTabConfig.endsWithInputted);
-        containsEditor.setText(UnscrambleTabConfig.containsInputted);
-        lengthEditor.setText(UnscrambleTabConfig.lengthInputted);
+            if (UnscrambleTabConfig.formExpanded) {
+                if (!expandableFormLayout.isOpened())
+                    expandableFormLayout.show();
+            } else {
+                if (expandableFormLayout.isOpened())
+                    expandableFormLayout.hide();
+            }
+            expandableFormLayout.clearAnimation();
 
-        if (UnscrambleTabConfig.headers != null && UnscrambleTabConfig.headers.size() > 0) {
-            mAdapter = new WordResultsAdapter(getActivity(), UnscrambleTabConfig.headers, UnscrambleTabConfig.childItems);
-            resultsExpandableListView.setAdapter(mAdapter);
+            spinnerSortingTypes.setSelection(UnscrambleTabConfig.orderingPosition);
+            scrambledWordEditor.setText(UnscrambleTabConfig.scrambledWordInputted);
+            startsWithEditor.setText(UnscrambleTabConfig.startsWithInputted);
+            endsWithEditor.setText(UnscrambleTabConfig.endsWithInputted);
+            containsEditor.setText(UnscrambleTabConfig.containsInputted);
+            lengthEditor.setText(UnscrambleTabConfig.lengthInputted);
 
-            headerResultsCountTextView.setText(getString(R.string.found_colon) + " " + UnscrambleTabConfig.foundWordsCount);
+            if (UnscrambleTabConfig.headers != null && UnscrambleTabConfig.headers.size() > 0) {
 
-            noWordsFoundTextView.setVisibility(View.GONE);
-            resultsExpandableListView.setVisibility(View.VISIBLE);
-        } else if (UnscrambleTabConfig.noMatchingWords) {
-            noWordsFoundTextView.setVisibility(View.VISIBLE);
-            unscramblingHintTextView.setVisibility(View.GONE);
-            resultsExpandableListView.setVisibility(View.GONE);
-            noWordsFoundTextView.setText(getString(R.string.no_words_found_for) + " '" +
-                    UnscrambleTabConfig.noMatchingFor + "' \n" + getString(R.string.in)
-                    + " '" + UnscrambleTabConfig.currentDictionaryName + "'");
+
+                mAdapter = new WordResultsAdapter(getActivity(), UnscrambleTabConfig.headers, UnscrambleTabConfig.childItems);
+                resultsExpandableListView.setAdapter(mAdapter);
+
+                headerResultsCountTextView.setText(getString(R.string.found_colon) + " " + UnscrambleTabConfig.foundWordsCount);
+
+                for (Integer position : UnscrambleTabConfig.expandedResultGroupItems) {
+                    resultsExpandableListView.expandGroup(position);
+                }
+
+                Log.e(null, "FVI: " + UnscrambleTabConfig.firstVisibleItem);
+
+                resultsExpandableListView.setSelection(UnscrambleTabConfig.firstVisibleItem);
+
+                noWordsFoundTextView.setVisibility(View.GONE);
+                unscramblingHintTextView.setVisibility(View.GONE);
+                resultsExpandableListView.setVisibility(View.VISIBLE);
+            } else if (UnscrambleTabConfig.noMatchingWords) {
+                noWordsFoundTextView.setVisibility(View.VISIBLE);
+                unscramblingHintTextView.setVisibility(View.GONE);
+                resultsExpandableListView.setVisibility(View.GONE);
+                noWordsFoundTextView.setText(getString(R.string.no_words_found_for) + " '" +
+                        UnscrambleTabConfig.noMatchingFor + "' \n" + getString(R.string.in)
+                        + " '" + UnscrambleTabConfig.currentDictionaryName + "'");
+            }
+
+            UnscrambleTabConfig.applyChanges = false;
         }
 
     }
@@ -473,7 +529,7 @@ public class UnscrambleFragment extends Fragment implements View.OnClickListener
 
             progressDialog =
                     new MaterialDialog.Builder(getActivity())
-                            .title(R.string.progress_dialog)
+                            .title(R.string.processing)
                             .content(R.string.unscrambling_word)
                             .progress(true, 0)
                             .cancelable(false)
