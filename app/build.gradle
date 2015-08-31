@@ -12,6 +12,11 @@ android {
     compileSdkVersion 22
     buildToolsVersion "21.1.2"
 
+    packagingOptions {
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+    }
+
     defaultConfig {
         applicationId "andrzej.example.com.wordunscrambler"
         minSdkVersion 14
@@ -41,4 +46,5 @@ dependencies {
     compile 'com.commonsware.cwac:richedit:0.5.+'
     compile 'com.rengwuxian.materialedittext:library:2.1.4'
     compile "com.andkulikov:transitionseverywhere:1.5.0"
+    compile 'org.apache.commons:commons-lang3:3.0'
 }

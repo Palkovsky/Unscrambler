@@ -303,6 +303,7 @@ public class DictionariesFragment extends Fragment implements ItemActionsListene
         Intent dictionaryIntent = new Intent(getActivity(), DictionaryActivity.class);
         dictionaryIntent.putExtra(DictionaryActivity.DICTIONARY_PATH_BUNDLE_KEY, dictionary.getFile().toString());
         startActivity(dictionaryIntent);
+        getActivity().overridePendingTransition(R.anim.left_to_right_animation, R.anim.dummy_animation_main);
     }
 
     @Override

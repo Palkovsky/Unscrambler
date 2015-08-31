@@ -146,9 +146,11 @@ public class DictionaryActivity extends AppCompatActivity implements TextWatcher
                                 TabsConfig.CURRENT_DICTIONARY_POSITION = 0;
                                 dictionary.getFile().delete();
                                 finish();
+                                overridePendingTransition(R.anim.dummy_animation_back, R.anim.right_to_left_animation);
                             }
                         })
                         .show();
+
                 break;
 
             case R.id.menu_saveDictionary:
@@ -201,7 +203,7 @@ public class DictionaryActivity extends AppCompatActivity implements TextWatcher
 
                         dictionary.setFile(directory);
 
-                        finish();
+                        this.onBackPressed();
                     } else
                         Toast.makeText(getApplicationContext(), R.string.file_already_exsists, Toast.LENGTH_SHORT).show();
 
@@ -264,6 +266,7 @@ public class DictionaryActivity extends AppCompatActivity implements TextWatcher
                                 DictionaryUtils.setDictionaryPreference(getApplicationContext(), dictionary);
 
                             finish();
+                            overridePendingTransition(R.anim.dummy_animation_back, R.anim.right_to_left_animation);
                         } else
                             Toast.makeText(getApplicationContext(), R.string.file_already_exsists, Toast.LENGTH_SHORT).show();
 
@@ -276,7 +279,8 @@ public class DictionaryActivity extends AppCompatActivity implements TextWatcher
                 break;
 
             case android.R.id.home:
-                this.onBackPressed();
+                finish();
+                overridePendingTransition(R.anim.dummy_animation_back, R.anim.right_to_left_animation);
                 break;
         }
 
@@ -319,7 +323,6 @@ public class DictionaryActivity extends AppCompatActivity implements TextWatcher
     protected void onPause() {
         super.onPause();
         hideKeyboard();
-        overridePendingTransition(R.anim.dummy_animation_back, R.anim.right_to_left_animation);
     }
 
     @Override
@@ -335,6 +338,9 @@ public class DictionaryActivity extends AppCompatActivity implements TextWatcher
     public void afterTextChanged(Editable s) {
     }
 
-
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.dummy_animation_back, R.anim.right_to_left_animation);
+    }
 }

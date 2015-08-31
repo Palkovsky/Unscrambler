@@ -2,11 +2,17 @@ package andrzej.example.com.wordunscrambler.utils;
 
 import android.util.Log;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Created by andrzej on 26.08.15.
@@ -27,8 +33,13 @@ public class StringOpearations {
     public static List<String> findScrambledWords(String scrambledWord, String[] chunkedDictionary) {
         List<String> wordsList = new ArrayList<>();
 
+
+        String scrambledWordCanonical = toCanonical(scrambledWord);
         int maxLength = scrambledWord.length();
         String[] scrambledCharacters = scrambledWord.trim().split("(?!^)");
+
+
+
 
         for (String dictionaryWord : chunkedDictionary) {
 
@@ -40,7 +51,6 @@ public class StringOpearations {
 
                 for (int i = 0; i < dictionaryWordCharacters.length; i++) {
                     if (scrambledCharactersCopy.contains(dictionaryWordCharacters[i])) {
-
 
                         scrambledCharactersCopy.remove(dictionaryWordCharacters[i]);
                         if (i == dictionaryWordCharacters.length - 1) {
@@ -55,7 +65,15 @@ public class StringOpearations {
                 }
             }
         }
+
         return wordsList;
+    }
+
+    private static String toCanonical(String word) {
+        char[] array = word.toCharArray();
+        Arrays.sort(array);
+        return new String(array);
+
     }
 
     public static List<String> startsWithFiltering(List<String> wordList, String filter) {

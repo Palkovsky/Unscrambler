@@ -12,6 +12,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -128,7 +129,14 @@ public class UnscrambleFragment extends Fragment implements View.OnClickListener
         });
         scrambledWordEditor.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {if (actionId == EditorInfo.IME_ACTION_SEARCH) {unscramble();return true;}return false;}});
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    unscramble();
+                    return true;
+                }
+                return false;
+            }
+        });
         startsWithEditor.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -275,6 +283,13 @@ public class UnscrambleFragment extends Fragment implements View.OnClickListener
                             UnscrambleTabConfig.headers = headers;
                             UnscrambleTabConfig.childItems = childItems;
                             UnscrambleTabConfig.noMatchingWords = false;
+
+
+                            //Scroll to the bottom and show the longest word that have been found
+                            if(sortingMethod == ResultSortingMethod.ASCENDING || sortingMethod == ResultSortingMethod.DESCENDING) {
+                                resultsExpandableListView.setSelection(headers.size() - 1);
+                                resultsExpandableListView.expandGroup(headers.size() - 1);
+                            }
 
                             noWordsFoundTextView.setVisibility(View.GONE);
                             resultsExpandableListView.setVisibility(View.VISIBLE);

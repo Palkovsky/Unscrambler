@@ -83,9 +83,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         this.selectedFragment = backHandledFragment;
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        overridePendingTransition(R.anim.left_to_right_animation, R.anim.dummy_animation_main);
-    }
+
 }

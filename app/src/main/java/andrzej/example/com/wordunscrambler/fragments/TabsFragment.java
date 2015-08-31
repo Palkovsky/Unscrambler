@@ -149,11 +149,13 @@ public class TabsFragment extends BackHandledFragment implements ViewPager.OnPag
             case R.id.menu_createDictionary:
                 Intent dictionaryIntent = new Intent(getActivity(), DictionaryActivity.class);
                 startActivity(dictionaryIntent);
+                getActivity().overridePendingTransition(R.anim.left_to_right_animation, R.anim.dummy_animation_main);
                 break;
 
             case R.id.menu_downloadDictionaries:
                 Intent downloadActivityIntent = new Intent(getActivity(), DownloadActivity.class);
                 startActivity(downloadActivityIntent);
+                getActivity().overridePendingTransition(R.anim.left_to_right_animation, R.anim.dummy_animation_main);
                 break;
 
             case R.id.menu_browseDicts:

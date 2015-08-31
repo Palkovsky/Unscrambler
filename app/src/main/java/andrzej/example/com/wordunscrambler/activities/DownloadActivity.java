@@ -38,7 +38,8 @@ public class DownloadActivity extends AppCompatActivity {
 
         switch (item.getItemId()){
             case android.R.id.home:
-                this.onBackPressed();
+                finish();
+                overridePendingTransition(R.anim.dummy_animation_back, R.anim.right_to_left_animation);
                 break;
         }
 
@@ -46,8 +47,8 @@ public class DownloadActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
+    public void onBackPressed() {
+        super.onBackPressed();
         overridePendingTransition(R.anim.dummy_animation_back, R.anim.right_to_left_animation);
     }
 }
