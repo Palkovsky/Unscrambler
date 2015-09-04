@@ -5,4 +5,5 @@ package andrzej.example.com.wordunscrambler.config;
  */
 public class SharedPreferenceKeys {
     public static final String KEY_CURRENT_DICTIONARY_PATH = "CURRENT_DICTIONARY_PREF";
+    public static final String KEY_DICTIONARIES_SORTING_METHOD = "CURRENT_DICTIONARY_SORTING_METHOD";
 }

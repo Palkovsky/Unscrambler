@@ -2,6 +2,7 @@ package andrzej.example.com.wordunscrambler.fragments.tabs;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -76,6 +77,7 @@ public class UnscrambleFragment extends Fragment implements View.OnClickListener
 
     //Adapter
     WordResultsAdapter mAdapter;
+
 
 
     public UnscrambleFragment() {

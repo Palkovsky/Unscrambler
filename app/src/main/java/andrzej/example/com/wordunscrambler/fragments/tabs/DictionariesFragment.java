@@ -1,7 +1,9 @@
 package andrzej.example.com.wordunscrambler.fragments.tabs;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -28,6 +30,7 @@ import java.util.List;
 import andrzej.example.com.wordunscrambler.R;
 import andrzej.example.com.wordunscrambler.activities.DictionaryActivity;
 import andrzej.example.com.wordunscrambler.adapters.SwipeDictionaryListAdapter;
+import andrzej.example.com.wordunscrambler.config.SharedPreferenceKeys;
 import andrzej.example.com.wordunscrambler.config.SortingMethods;
 import andrzej.example.com.wordunscrambler.config.TabsConfig;
 import andrzej.example.com.wordunscrambler.interfaces.DictionariesInitEndListener;
@@ -79,6 +82,9 @@ public class DictionariesFragment extends Fragment implements ItemActionsListene
     public static boolean otherWindowOpened = false;
     public static boolean updateCurrent = false;
 
+    //Utils
+    SharedPreferences prefs;
+
     public DictionariesFragment() {
         // Required empty public constructor
     }
@@ -88,6 +94,10 @@ public class DictionariesFragment extends Fragment implements ItemActionsListene
         super.onCreate(savedInstanceState);
         //Init adapter
         mAdapter = new SwipeDictionaryListAdapter(getActivity(), dictionaries);
+
+        prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
+        sortingMethod = prefs.getInt(SharedPreferenceKeys.KEY_DICTIONARIES_SORTING_METHOD, SortingMethods.NO_SORTING);
     }
 
     @Override
@@ -374,8 +384,11 @@ public class DictionariesFragment extends Fragment implements ItemActionsListene
                             case R.id.item_wordCountDesc:
                                 sortingMethod = SortingMethods.SORTING_BY_WORDS_COUNT_DESC;
                                 break;
-
                         }
+
+                        SharedPreferences.Editor editor = prefs.edit();
+                        editor.putInt(SharedPreferenceKeys.KEY_DICTIONARIES_SORTING_METHOD, sortingMethod);
+                        editor.apply();
 
                         if (finalCurrentSorting != sortingMethod) {
                             update();
